@@ -25,7 +25,7 @@
         { "firstName":"Eric", "lastName":"Cadigan", "address":"951 LoneTree Rd", "city":"Culver", "zip":"97451", "phone":"841-874-7458", "email":"gramps@email.com" }
 	], 
     "firestations": [
-	{ "address":"1509 Culver St", "station":"3" },
+	    { "address":"1509 Culver St", "station":"3" },
         { "address":"29 15th St", "station":"2" },
         { "address":"834 Binoc Ave", "station":"3" },
         { "address":"644 Gershwin Cir", "station":"1" },

@@ -1,6 +1,4 @@
 package com.safetynet.SafetyNetAlerts.repository;
-
-import com.safetynet.SafetyNetAlerts.CustomProperties;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,11 +7,9 @@ import java.util.List;
 
 @Component
 public class PersonRepository implements CRUD_Method<Person> {
-    @Autowired
-    CustomProperties customProperties;
+
     @Autowired
     private ReadFromJason_DAO readFromJason_dao;
-
     //Repository centrale
     private Repository repository;
 

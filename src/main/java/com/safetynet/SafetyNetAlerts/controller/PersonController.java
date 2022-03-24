@@ -4,8 +4,7 @@ import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PersonController {
@@ -21,6 +20,16 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok().body(persons);
+        }
+    }
+    @PostMapping(value = "/person")
+    //Rajout un Person dans Repository mais pas dans le fichier Json <Person> / <Void> sont Pareil
+    public ResponseEntity<Person> savePerson(@RequestBody Person p){
+        Boolean candidate = personService.savePerson(p);
+        if (candidate){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.notFound().build();
         }
     }
 

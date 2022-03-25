@@ -11,4 +11,6 @@ public interface CRUD_Method<Type>{
     Boolean delete(Type type);
 
     Type update(int i, Type type);
+
+    List<Type> getByAddress(String address);
 }

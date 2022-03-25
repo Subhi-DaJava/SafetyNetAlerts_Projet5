@@ -19,7 +19,9 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
     }
 
     private void loadFireStationsFromJsonFile(){
+        //Mapping JSON to Repository
         repository = readFromJason_dao.readFromJsonFile();
+        //Mapping firestations to the list FireStations
         fireStations = repository.getFirestations();
     }
 
@@ -27,6 +29,7 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
     public List<FireStation> getAll() {
         if(repository == null )
             loadFireStationsFromJsonFile();
+        //fireStations(Mapping, désérialiser) affected by repository.getFireStations()
         return fireStations;
     }
 
@@ -34,6 +37,7 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
     public Boolean save(FireStation fireStation) {
         if(repository == null)
             loadFireStationsFromJsonFile();
+        //Add fireStation to the list fireStations
         return fireStations.add(fireStation);
     }
 
@@ -41,6 +45,7 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
     public Boolean delete(FireStation fireStation) {
         if(repository == null)
             loadFireStationsFromJsonFile();
+        //Remove fireStation from the List of fireStations
         return fireStations.remove(fireStation);
     }
 
@@ -48,6 +53,12 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
     public FireStation update(int i, FireStation fireStation) {
         if(repository == null)
             loadFireStationsFromJsonFile();
+        //Update the element at the index of i of the list fireStations to fireStation
         return fireStations.set(i,fireStation);
+    }
+
+    @Override
+    public List<FireStation> getByAddress(String address) {
+        return null;
     }
 }

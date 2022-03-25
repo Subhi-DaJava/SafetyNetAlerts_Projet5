@@ -4,8 +4,7 @@ import com.safetynet.SafetyNetAlerts.model.FireStation;
 import com.safetynet.SafetyNetAlerts.service.FireStationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class FireStationController {
@@ -21,6 +20,37 @@ public class FireStationController {
         else
             return ResponseEntity.ok().body(allFireStations);
     }
+    //Ajouter d'un mapping caserne/adresse
+    @PostMapping(value = "/firestation")
+    public ResponseEntity<Void> addFireStation(@RequestBody FireStation f){
+        Boolean isAdded = fireStationService.saveStation(f);
+        if(isAdded){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    //Supprimer le mapping d'une caserne par l'adresse comme un indicateur unique
+    @DeleteMapping(value = "/firestation/{address}")
+    public ResponseEntity<Void> deleteFireStation(@PathVariable("address") String address){
+        Boolean isDeleted = fireStationService.deleteStation(address);
+        if(isDeleted){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.notFound().build();
+        }
 
+    }
+    ////Mettre à jour le numéro de la caserne d'une adresse
+    @PutMapping(value = "/firestation/{address}/{number}")
+    public ResponseEntity<Void> updateFireStation(@PathVariable("address") String address, @PathVariable("number") String number){
+        FireStation isUpdated = fireStationService.updateStation(address, number);
+        if (isUpdated != null){
+            return ResponseEntity.ok().build();
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
 

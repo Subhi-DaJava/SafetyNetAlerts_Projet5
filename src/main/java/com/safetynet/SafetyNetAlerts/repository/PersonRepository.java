@@ -26,7 +26,7 @@ public class PersonRepository implements CRUD_Method<Person> {
         //Extraire les personnes
         persons = repository.getPersons();
     }
-    //retourne tous les Persons
+    //retourne toutes les personnes
     @Override
     public List<Person> getAll() {
         if(repository == null)
@@ -56,5 +56,22 @@ public class PersonRepository implements CRUD_Method<Person> {
         //Inserts the specified element at the specified position in this list (optional operation).
         //Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
         return persons.set(i,p);
+    }
+
+    //Afficher les personnes dans la même adresse
+    @Override
+    public List<Person> getByAddress(String address) {
+        if (repository == null)
+            loadPersonsFromJasonFile();
+
+        List<Person> listAddress = persons;
+        for (Person person : persons) {
+            if (!person.getAddress().equals(address)) {
+                listAddress.remove(person);
+            } else {
+                return null;
+            }
+        }
+        return listAddress;
     }
 }

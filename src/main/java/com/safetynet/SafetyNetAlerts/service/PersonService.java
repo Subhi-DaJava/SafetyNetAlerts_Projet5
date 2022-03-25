@@ -28,7 +28,8 @@ public class PersonService {
     public Boolean savePerson(Person p){
         return personRepository.save(p);
     }
-    //Deux arguments, parce que certaines personnes portent le même nom
+
+    //Delete a person (fistName & lastName required)
     public Boolean deletePerson(String firstName, String lastName){
         for(Person p : personRepository.getAll()){
             if(p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
@@ -36,7 +37,7 @@ public class PersonService {
         }
         return false;
     }
-
+    //Update a person's all attributs sauf firstName & lastName
     public Person updatePerson(Person p){
         Person candidate = null;
         List<Person> allPersons = personRepository.getAll();
@@ -47,5 +48,10 @@ public class PersonService {
             }
         }
         return candidate;
+    }
+
+    public Iterable<Person> getByAddress(String address){
+
+        return personRepository.getByAddress(address);
     }
 }

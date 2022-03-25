@@ -16,21 +16,51 @@ public class PersonController {
     public ResponseEntity<Iterable<Person>> getAllPerson(){
         Iterable<Person> persons = personService.getAllPersons();
 
-        if(persons == null) {
-            return ResponseEntity.notFound().build();
-        } else {
+        if(persons != null) {
             return ResponseEntity.ok().body(persons);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
-    @PostMapping(value = "/person")
     //Rajout un Person dans Repository mais pas dans le fichier Json <Person> / <Void> sont Pareil
-    public ResponseEntity<Person> savePerson(@RequestBody Person p){
-        Boolean candidate = personService.savePerson(p);
-        if (candidate){
+    @PostMapping(value = "/person")
+    public ResponseEntity<Void> addPerson(@RequestBody Person p){
+        Boolean isAdded = personService.savePerson(p);
+        if (isAdded){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    //Mettre à jour une personne déjà existante(sauf les champs firstName & lastName)
+    @PutMapping(value ="/person")
+    public  ResponseEntity<Void> updatePerson(@RequestBody Person p){
+        Person candidate = personService.updatePerson(p);
+        if (candidate != null){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    //Supprimer une personne (nom et prénom comme identificateur unique)
+    @DeleteMapping(value = "/person/{firstName}/{lastName}")
+    public ResponseEntity<Void> deletePerson(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName){
+        Boolean isDeleted = personService.deletePerson(firstName,lastName);
+        if(isDeleted){
             return ResponseEntity.ok().build();
         }else {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @GetMapping(value = "/person/{address}")
+    public ResponseEntity<Iterable<Person>> getByAddress(@PathVariable("address") String address){
+
+        Iterable<Person> listFamilleByAddress = personService.getByAddress(address);
+        if (listFamilleByAddress != null){
+            return ResponseEntity.ok().body(listFamilleByAddress);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

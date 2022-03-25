@@ -3,6 +3,7 @@ import com.safetynet.SafetyNetAlerts.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -58,18 +59,16 @@ public class PersonRepository implements CRUD_Method<Person> {
         return persons.set(i,p);
     }
 
-    //Afficher les personnes dans la même adresse
+    //Afficher les personnes dans la même adresse(tri par adresse)
     @Override
     public List<Person> getByAddress(String address) {
         if (repository == null)
             loadPersonsFromJasonFile();
 
-        List<Person> listAddress = persons;
+        List<Person> listAddress = new ArrayList<>();
         for (Person person : persons) {
-            if (!person.getAddress().equals(address)) {
-                listAddress.remove(person);
-            } else {
-                return null;
+            if (person.getAddress().equals(address)) {
+                listAddress.add(person);
             }
         }
         return listAddress;

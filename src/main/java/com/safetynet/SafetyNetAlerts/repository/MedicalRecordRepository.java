@@ -48,4 +48,10 @@ public class MedicalRecordRepository implements CRUD_Method<MedicalRecord>{
             loadMedicalRecordsFromJasonFile();
         return medicalRecords.set(i,medicalRecord);
     }
+
+    @Override
+    public List<MedicalRecord> getByAddress(String address) {
+        return null;
+    }
+
 }

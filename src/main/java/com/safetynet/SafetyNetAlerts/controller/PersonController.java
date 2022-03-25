@@ -52,7 +52,7 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    //Tri par adresse
     @GetMapping(value = "/person/{address}")
     public ResponseEntity<Iterable<Person>> getByAddress(@PathVariable("address") String address){
 

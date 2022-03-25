@@ -49,9 +49,8 @@ public class PersonService {
         }
         return candidate;
     }
-
+    //Trier les personnes par son adresse
     public Iterable<Person> getByAddress(String address){
-
         return personRepository.getByAddress(address);
     }
 }

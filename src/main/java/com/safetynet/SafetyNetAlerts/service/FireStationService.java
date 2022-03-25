@@ -49,4 +49,8 @@ public class FireStationService {
         }
         return candidate;
     }
+    //Trier les adresses par la caserne de pompiers
+    public Iterable<FireStation> getAddressByStation(String station){
+        return fireStationRepository.getByType(station);
+    }
 }

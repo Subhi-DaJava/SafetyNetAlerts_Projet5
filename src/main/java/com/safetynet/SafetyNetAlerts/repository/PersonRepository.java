@@ -61,7 +61,7 @@ public class PersonRepository implements CRUD_Method<Person> {
 
     //Afficher les personnes dans la même adresse(tri par adresse)
     @Override
-    public List<Person> getByAddress(String address) {
+    public List<Person> getByType(String address) {
         if (repository == null)
             loadPersonsFromJasonFile();
 

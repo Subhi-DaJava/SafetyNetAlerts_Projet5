@@ -46,11 +46,13 @@ public class MedicalRecordRepository implements CRUD_Method<MedicalRecord>{
     public MedicalRecord update(int i, MedicalRecord medicalRecord) {
         if(repository == null)
             loadMedicalRecordsFromJasonFile();
+        //Inserts the specified element at the specified position in this list (optional operation).
+        //Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
         return medicalRecords.set(i,medicalRecord);
     }
 
     @Override
-    public List<MedicalRecord> getByAddress(String address) {
+    public List<MedicalRecord> getByType(String address) {
         return null;
     }
 

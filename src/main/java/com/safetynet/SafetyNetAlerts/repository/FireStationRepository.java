@@ -1,9 +1,15 @@
 package com.safetynet.SafetyNetAlerts.repository;
 
 import com.safetynet.SafetyNetAlerts.model.FireStation;
+import com.safetynet.SafetyNetAlerts.model.Person;
+import com.safetynet.SafetyNetAlerts.service.FireStationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -58,7 +64,16 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
     }
 
     @Override
-    public List<FireStation> getByAddress(String address) {
-        return null;
+    public List<FireStation> getByType(String station) {
+        if(repository == null)
+            loadFireStationsFromJsonFile();
+        List<FireStation> stations = new ArrayList<>();
+        for(FireStation fireStation : fireStations){
+            if (fireStation.getStation().equals(station)){
+                stations.add(fireStation);
+            }
+        }
+        return stations;
     }
+
 }

@@ -12,5 +12,5 @@ public interface CRUD_Method<Type>{
 
     Type update(int i, Type type);
 
-    List<Type> getByAddress(String address);
+    List<Type> getByType(String address);
 }

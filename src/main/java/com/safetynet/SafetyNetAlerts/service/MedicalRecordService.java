@@ -23,7 +23,7 @@ public class MedicalRecordService {
     public Iterable<MedicalRecord> getAllMedicalRecords(){
         return medicalRecordRepository.getAll();
     }
-    public Boolean saveMedicalRocord(MedicalRecord medicalRecord){
+    public Boolean saveMedicalRecord(MedicalRecord medicalRecord){
         return medicalRecordRepository.save(medicalRecord);
     }
     public Boolean deleteMedicalRecord(String firstName, String lastName){

@@ -52,5 +52,16 @@ public class FireStationController {
             return ResponseEntity.notFound().build();
         }
     }
+    //Trier les adresses par la caserne de pompiers
+    @GetMapping(value = "/firestation/{station}")
+    public ResponseEntity<Iterable<FireStation>> getByAddress(@PathVariable("station") String station){
+
+        Iterable<FireStation> listAddressByStation = fireStationService.getAddressByStation(station);
+        if (listAddressByStation != null){
+            return ResponseEntity.ok().body(listAddressByStation);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
 

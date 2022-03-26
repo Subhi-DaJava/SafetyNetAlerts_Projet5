@@ -12,7 +12,7 @@
 	<artifactId>SafetyNet-Alerts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SafetyNetAlerts</name>
-	<description>Envoyer des informations aux systèmes de services d&apos;urgence</description>
+	<description>Envoyer des informations aux systèmes de services d'urgence</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

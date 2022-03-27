@@ -9,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,9 +31,6 @@ class PersonControllerTest {
     //La méthode du controller exécutée par l’appel de “/person” utilise PersonService.
     @MockBean
     private PersonService personService;
-    @Autowired
-    PersonController personController;
-
     /*
     La méthode perform prend en paramètre l’instruction get(“/person”). On exécute donc une requête GET sur l’URL /person.
     L’instruction .andExpect(status().isOk()) indique qu'une réponse HTTP 200.
@@ -156,5 +152,7 @@ class PersonControllerTest {
                 .andExpect(status().isNotFound());
         verify(personService).getByAddress(anyString());
     }
+
+
 
 }

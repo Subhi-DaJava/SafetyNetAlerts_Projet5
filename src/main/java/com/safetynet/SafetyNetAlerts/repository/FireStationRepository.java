@@ -29,6 +29,7 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
         repository = readFromJason_dao.readFromJsonFile();
         //Mapping firestations to the list FireStations
         fireStations = repository.getFirestations();
+        System.out.println(fireStations.size()+" fireStations are in the DataBase.");
     }
 
     @Override

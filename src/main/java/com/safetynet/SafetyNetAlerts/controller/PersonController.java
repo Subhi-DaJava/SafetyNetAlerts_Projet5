@@ -1,10 +1,13 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
+import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class PersonController {
@@ -15,7 +18,6 @@ public class PersonController {
     @GetMapping(value = "/person")
     public ResponseEntity<Iterable<Person>> getAllPerson(){
         Iterable<Person> persons = personService.getAllPersons();
-
         if(persons != null) {
             return ResponseEntity.ok().body(persons);
         } else {
@@ -63,4 +65,15 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
     }
+    //Retourner les adresses mail de tous les habitants d'une ville
+    @GetMapping("/communityEmail")
+    public ResponseEntity<Iterable<CommunityEmailDTO>> getAllEmailsOfGivenCity(@RequestParam (name="city") String city){
+        List<CommunityEmailDTO> allEmails = personService.getAllEmailsFromGivenCity(city);
+        if(allEmails != null){
+            return ResponseEntity.ok().body(allEmails);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

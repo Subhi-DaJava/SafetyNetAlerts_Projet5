@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -58,29 +60,21 @@ public class PersonService {
 
     //Retourner une list<Email> ou null de tous les habitants d'une ville
     public List<CommunityEmailDTO> getAllEmailsFromGivenCity(String city){
-
-        List<CommunityEmailDTO> allEmails = new ArrayList<>();
-        //pour éviter le doublon
-        boolean isEmailExisting = false;
-
+        List<CommunityEmailDTO> emailList = new ArrayList<>();
+        Set<String> emailSet = new HashSet<>();
         for(Person person : personRepository.getAll()){
-            if (person.getCity().equals(city)){
-                CommunityEmailDTO newCommunityEmail = new CommunityEmailDTO(person.getEmail());
-                //Éviter le doublon d'email
-                for (CommunityEmailDTO emailAlreadyExisted : allEmails){
-                    //Si l'email est déjà existé, metre l'Objet Boolean en vrai pour que la liste allEmails ne peut pas l'ajouter
-                    if(emailAlreadyExisted.getEmail().equals(newCommunityEmail.getEmail())){
-                        isEmailExisting = true;
-                    }
-                }
-                if(!isEmailExisting){
-                    allEmails.add(newCommunityEmail);
-                }
+            if (person.getCity().contains(city)){
+                emailSet.add(person.getEmail());
             }
-            isEmailExisting = false;
         }
-        System.out.println(allEmails.size()+" emails have been found.");
-        return allEmails;
+        for(String email : emailSet){
+            CommunityEmailDTO communityEmailDTO = new CommunityEmailDTO(email);
+            emailList.add(communityEmailDTO);
+        }
+
+        System.out.println(emailList.size()+" emails have been found.");
+        return emailList;
     }
+
 
 }

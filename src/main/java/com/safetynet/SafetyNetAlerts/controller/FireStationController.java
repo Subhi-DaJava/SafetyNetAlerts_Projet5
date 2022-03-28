@@ -1,10 +1,13 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
+import com.safetynet.SafetyNetAlerts.dto.PhoneAlertDTO;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
 import com.safetynet.SafetyNetAlerts.service.FireStationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class FireStationController {
@@ -59,6 +62,16 @@ public class FireStationController {
         Iterable<FireStation> listAddressByStation = fireStationService.getAddressByStation(station);
         if (listAddressByStation != null){
             return ResponseEntity.ok().body(listAddressByStation);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(value = "/phoneAlert")
+    public ResponseEntity<Iterable<PhoneAlertDTO>> getAllPhoneNumbersOfPersonsCoveredByOneFireStation(@RequestParam(name="firestation") String fireStationNumber){
+        List<PhoneAlertDTO> phoneAlertDTOS = fireStationService.getAllPhoneNumbersOfPersonsCoveredByOneFireStation(fireStationNumber);
+        if (phoneAlertDTOS != null){
+            return ResponseEntity.ok().body(phoneAlertDTOS);
         }else {
             return ResponseEntity.notFound().build();
         }

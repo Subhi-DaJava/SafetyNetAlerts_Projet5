@@ -56,6 +56,7 @@ public class PersonService {
         return personRepository.getByType(address);
     }
 
+    //Retourner une list<Email> ou null de tous les habitants d'une ville
     public List<CommunityEmailDTO> getAllEmailsFromGivenCity(String city){
 
         List<CommunityEmailDTO> allEmails = new ArrayList<>();
@@ -78,7 +79,7 @@ public class PersonService {
             }
             isEmailExisting = false;
         }
-        System.out.println(allEmails.size()+" emails found.");
+        System.out.println(allEmails.size()+" emails have been found.");
         return allEmails;
     }
 

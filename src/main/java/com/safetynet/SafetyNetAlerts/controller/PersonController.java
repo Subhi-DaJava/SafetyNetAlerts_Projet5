@@ -1,6 +1,7 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
 import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
+import com.safetynet.SafetyNetAlerts.dto.FireDTO;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,5 +76,12 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @GetMapping(value = "/fire")
+    public ResponseEntity<Iterable<FireDTO>> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(@RequestParam(name="address") String address){
+        List<FireDTO> listFireDto = personService.getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(address);
+        if(listFireDto != null){
+            return ResponseEntity.ok().body(listFireDto);
+        }else
+            return ResponseEntity.notFound().build();
+    }
 }

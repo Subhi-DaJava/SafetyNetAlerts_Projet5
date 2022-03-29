@@ -1,7 +1,8 @@
 package com.safetynet.SafetyNetAlerts.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safetynet.SafetyNetAlerts.CustomProperties;
+
+import com.safetynet.SafetyNetAlerts.util.CustomProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

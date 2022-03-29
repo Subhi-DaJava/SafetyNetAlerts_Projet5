@@ -1,10 +1,15 @@
 package com.safetynet.SafetyNetAlerts.service;
 
 import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
+import com.safetynet.SafetyNetAlerts.dto.FireDTO;
+import com.safetynet.SafetyNetAlerts.model.FireStation;
+import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.repository.FireStationRepository;
 import com.safetynet.SafetyNetAlerts.repository.MedicalRecordRepository;
 import com.safetynet.SafetyNetAlerts.repository.PersonRepository;
+import com.safetynet.SafetyNetAlerts.util.SolutionFormatter;
+import com.safetynet.SafetyNetAlerts.util.SolutionFormatterImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +80,38 @@ public class PersonService {
         System.out.println(emailList.size()+" emails have been found.");
         return emailList;
     }
+    //Retourner la liste des habitants(que le NOM) d'une adresse donnée, ainsi que le numéro de la caserne de pompiers la desservante,
+    // les antécédents médicaux(médicaments,posologie et allergie)
+    public List<FireDTO> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(String address) {
+        List<FireDTO> fireDTOList = new ArrayList<>();
+        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
+        String station = null;
+        int age;
+        //Period age= null;
+        for (Person person : personRepository.getAll()) {
+            if (person.getAddress().contains(address)) {
+                for (FireStation fireStation : fireStationRepository.getAll()) {
+                    if (fireStation.getAddress().equals(person.getAddress())) {
+                        station = fireStation.getStation();
+                    }
+                }
+                for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()) {
+                    if (person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())) {
+                       age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate(),"MM/dd/yyyy");
+                        Set<String> medicationsSet = new HashSet<>();
+                        Set<String> allergiesSet = new HashSet<>();
+                        medicationsSet.addAll(medicalRecord.getMedications());
+                        allergiesSet.addAll(medicalRecord.getAllergies());
 
+                        FireDTO newFireDTO = new FireDTO(person.getLastName(), person.getPhone(), station, age, medicationsSet,allergiesSet);
+                        fireDTOList.add(newFireDTO);
+                    }
+                }
 
+            }
+        }
+        System.out.println(fireDTOList.size()+" people are in this address.");
+        return fireDTOList;
+
+    }
 }

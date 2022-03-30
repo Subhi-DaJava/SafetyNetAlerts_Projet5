@@ -6,7 +6,12 @@ import java.time.format.DateTimeFormatter;
 
 public class SolutionFormatterImpl implements SolutionFormatter{
 
-
+    /**
+     *
+     * @param date Elle est String en format date par ex. "08/18/2001"
+     * @param format Il désigne un format de date comme "MM/dd/yyyy", mais en String
+     * @return Age (year/an) en int
+     */
     @Override
     public int formatterStringToDate(String date, String format) {
 

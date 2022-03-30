@@ -1,13 +1,8 @@
 package com.safetynet.SafetyNetAlerts.repository;
 
 import com.safetynet.SafetyNetAlerts.model.FireStation;
-import com.safetynet.SafetyNetAlerts.model.Person;
-import com.safetynet.SafetyNetAlerts.service.FireStationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;

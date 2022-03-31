@@ -11,6 +11,8 @@ import com.safetynet.SafetyNetAlerts.repository.MedicalRecordRepository;
 import com.safetynet.SafetyNetAlerts.repository.PersonRepository;
 import com.safetynet.SafetyNetAlerts.util.SolutionFormatter;
 import com.safetynet.SafetyNetAlerts.util.SolutionFormatterImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import java.util.Set;
 
 @Service
 public class PersonService {
+    private static Logger logger = LoggerFactory.getLogger(PersonService.class);
     @Autowired
     PersonRepository personRepository;
     @Autowired
@@ -41,6 +44,7 @@ public class PersonService {
 
     //Delete a person (fistName & lastName required)
     public Boolean deletePerson(String firstName, String lastName){
+        logger.debug("Delete a person by his firstName and lastName");
         for(Person p : personRepository.getAll()){
             if(p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
                 return personRepository.delete(p);
@@ -98,11 +102,8 @@ public class PersonService {
                 for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()) {
                     if (person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())) {
                        age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate(),"MM/dd/yyyy");
-                        Set<String> medicationsSet = new HashSet<>();
-                        Set<String> allergiesSet = new HashSet<>();
-                        medicationsSet.addAll(medicalRecord.getMedications());
-                        allergiesSet.addAll(medicalRecord.getAllergies());
-
+                        Set<String> medicationsSet = new HashSet<>(medicalRecord.getMedications());
+                        Set<String> allergiesSet = new HashSet<>(medicalRecord.getAllergies());
                         FireDTO newFireDTO = new FireDTO(person.getLastName(), person.getPhone(), station, age, medicationsSet,allergiesSet);
                         fireDTOList.add(newFireDTO);
                     }

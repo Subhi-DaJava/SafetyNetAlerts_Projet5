@@ -5,7 +5,10 @@ import com.safetynet.SafetyNetAlerts.dto.FireDTO;
 import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +16,7 @@ import java.util.List;
 
 @RestController
 public class PersonController {
+    private static Logger logger = LoggerFactory.getLogger(PersonController.class);
     @Autowired
     PersonService personService;
 
@@ -21,8 +25,10 @@ public class PersonController {
     public ResponseEntity<Iterable<Person>> getAllPerson(){
         Iterable<Person> persons = personService.getAllPersons();
         if(persons != null) {
-            return ResponseEntity.ok().body(persons);
+            logger.info("Get all persons and their information");
+            return ResponseEntity.status(HttpStatus.OK).body(persons);
         } else {
+            logger.error("No person in the DataBase or no success !");
             return ResponseEntity.notFound().build();
         }
     }
@@ -62,7 +68,8 @@ public class PersonController {
 
         Iterable<Person> listFamilleByAddress = personService.getByAddress(address);
         if (listFamilleByAddress != null){
-            return ResponseEntity.ok().body(listFamilleByAddress);
+            //ça passe ?
+            return ResponseEntity.ok(listFamilleByAddress);
         }else {
             return ResponseEntity.notFound().build();
         }
@@ -87,7 +94,7 @@ public class PersonController {
     }
 
     @GetMapping(value = "/personInfo")
-    public ResponseEntity<Iterable<PersonInfoDTO>> getInformationOfSameFamily(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
+    public ResponseEntity<Iterable<PersonInfoDTO>> getInformationOfSameFamily(@RequestParam(value = "firstName") String firstName, @RequestParam("lastName") String lastName){
         List<PersonInfoDTO> infoListOfFamily = personService.getInformationOfSameFamily(firstName,lastName);
         if(infoListOfFamily != null){
             return ResponseEntity.ok().body(infoListOfFamily);

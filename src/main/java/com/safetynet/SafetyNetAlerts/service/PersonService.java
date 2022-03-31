@@ -85,8 +85,6 @@ public class PersonService {
         return emailList;
     }
 
-
-
     //Retourner le nom, l'adresse, l'âge, l'adresse mail, les antécédents médicaux(médicaments,posologie, allergies)
     public List<PersonInfoDTO> getInformationOfSameFamily(String firstName, String lastName) {
         List<PersonInfoDTO> personInfoDTOS = new ArrayList<>();

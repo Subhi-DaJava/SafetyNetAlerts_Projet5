@@ -1,38 +1,23 @@
 package com.safetynet.SafetyNetAlerts.dto;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class FireDTO {
-    private String lastName;
-    private String phone;
+    private List<PersonListOfSameAddressDTO> listOfPersonAtSameAddress;
     private String station;
-    private int age;
-    private Set<String> medications;
-    private Set<String> allergies;
 
-    public FireDTO(String lastName, String phone, String station, int age, Set<String> medications, Set<String> allergies) {
-        this.lastName = lastName;
-        this.phone = phone;
+    public FireDTO(List<PersonListOfSameAddressDTO> listOfPersonAtSameAddress, String station) {
+        this.listOfPersonAtSameAddress = listOfPersonAtSameAddress;
         this.station = station;
-        this.age = age;
-        this.medications = medications;
-        this.allergies = allergies;
-    }
-    public String getLastName() {
-        return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public List<PersonListOfSameAddressDTO> getListOfPersonAtSameAddress() {
+        return listOfPersonAtSameAddress;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setListOfPersonAtSameAddress(List<PersonListOfSameAddressDTO> listOfPersonAtSameAddress) {
+        this.listOfPersonAtSameAddress = listOfPersonAtSameAddress;
     }
 
     public String getStation() {
@@ -43,40 +28,24 @@ public class FireDTO {
         this.station = station;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Set<String> getMedications() {
-        return medications;
-    }
-
-    public void setMedications(Set<String> medications) {
-        this.medications = medications;
-    }
-
-    public Set<String> getAllergies() {
-        return allergies;
-    }
-
-    public void setAllergies(Set<String> allergies) {
-        this.allergies = allergies;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FireDTO fireDTO = (FireDTO) o;
-        return age == fireDTO.age && Objects.equals(lastName, fireDTO.lastName) && Objects.equals(phone, fireDTO.phone) && Objects.equals(station, fireDTO.station) && Objects.equals(medications, fireDTO.medications) && Objects.equals(allergies, fireDTO.allergies);
+        return Objects.equals(listOfPersonAtSameAddress, fireDTO.listOfPersonAtSameAddress) && Objects.equals(station, fireDTO.station);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastName, phone, station, age, medications, allergies);
+        return Objects.hash(listOfPersonAtSameAddress, station);
+    }
+
+    @Override
+    public String toString() {
+        return "FireDTO{" +
+                "listOfPersonAtSameAddress=" + listOfPersonAtSameAddress +
+                ", station='" + station + '\'' +
+                '}';
     }
 }

@@ -62,8 +62,8 @@ public class FireStationController {
     }
 
     @GetMapping("/firestation/{stationNbr}")
-    public ResponseEntity<List<FireStation>> getByStationNumber(@PathVariable("stationNbr") String stationNbr){
-        List<FireStation> fireStations = fireStationService.getAllAddressCoveredByOneFireStation(stationNbr);
+    public ResponseEntity<Iterable<FireStation>> getByStationNumber(@PathVariable String stationNbr){
+        Iterable<FireStation> fireStations = fireStationService.getAllAddressCoveredByOneFireStation(stationNbr);
         if(fireStations != null){
             return ResponseEntity.ok(fireStations);
         }else {
@@ -73,10 +73,10 @@ public class FireStationController {
 
     //déplacer dans fireStationController
     @GetMapping(value = "/fire")
-    public ResponseEntity<Iterable<FireDTO>> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(@RequestParam(name="address") String address){
-        List<FireDTO> listFireDto = fireStationService.getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(address);
-        if(listFireDto != null){
-            return ResponseEntity.ok().body(listFireDto);
+    public ResponseEntity<FireDTO> getInfosOfPersonsLiveSameAddress(@RequestParam(name="address") String address){
+        FireDTO fireDto = fireStationService.getInfosOfPersonsLiveSameAddress(address);
+        if(fireDto != null){
+            return ResponseEntity.ok().body(fireDto);
         }else
             return ResponseEntity.notFound().build();
     }

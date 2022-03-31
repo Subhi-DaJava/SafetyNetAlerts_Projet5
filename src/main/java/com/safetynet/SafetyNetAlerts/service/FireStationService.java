@@ -1,9 +1,6 @@
 package com.safetynet.SafetyNetAlerts.service;
 
-import com.safetynet.SafetyNetAlerts.dto.FireDTO;
-import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
-import com.safetynet.SafetyNetAlerts.dto.HomeListCoveredByOneFireStationDTO;
-import com.safetynet.SafetyNetAlerts.dto.PhoneAlertDTO;
+import com.safetynet.SafetyNetAlerts.dto.*;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
 import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.model.Person;
@@ -58,67 +55,38 @@ public class FireStationService {
         return candidate;
     }
     //Trier les adresses par la caserne de pompiers
-    public List<FireStation> getAllAddressCoveredByOneFireStation(String stationNbr){
+    public Iterable<FireStation> getAllAddressCoveredByOneFireStation(String stationNbr){
         return fireStationRepository.getByType(stationNbr);
     }
 
-
     //Retourner la liste des habitants(que le NOM) d'une adresse donnée, ainsi que le numéro de la caserne de pompiers la desservante,
     // les antécédents médicaux(médicaments,posologie et allergie)
-   /* public List<FireDTO> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(String address) {
-        List<FireDTO> fireDTOList = new ArrayList<>();
+    public FireDTO getInfosOfPersonsLiveSameAddress(String address) {
+        List<PersonListOfSameAddressDTO> personListOfSameAddressDTOS = new ArrayList<>();
         SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
-        String station = null;
+        String stationNumber = null;
         int age;
-        for (Person person : personRepository.getAll()) {
-            if (person.getAddress().contains(address)) {
-                for (FireStation fireStation : fireStationRepository.getAll()) {
-                    if (fireStation.getAddress().equals(person.getAddress())) {
-                        station = fireStation.getStation();
-                    }
-                }
-                for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()) {
-                    if (person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())) {
-                       age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate(),"MM/dd/yyyy");
-                        Set<String> medicationsSet = new HashSet<>(medicalRecord.getMedications());
-                        Set<String> allergiesSet = new HashSet<>(medicalRecord.getAllergies());
-                        FireDTO newFireDTO = new FireDTO(person.getLastName(), person.getPhone(), station, age, medicationsSet,allergiesSet);
-                        fireDTOList.add(newFireDTO);
-                    }
-                }
 
+        for (FireStation fireStation : fireStationRepository.getAll()) {
+            if (fireStation.getAddress().equals(address)) {
+                stationNumber = fireStation.getStation();
             }
         }
-        System.out.println(fireDTOList.size()+" people are in this address.");
-        return fireDTOList;
-
-    }*/
-
-    //Retourner la liste des habitants(que le NOM) d'une adresse donnée, ainsi que le numéro de la caserne de pompiers la desservante,
-    // les antécédents médicaux(médicaments,posologie et allergie)
-    public List<FireDTO> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(String address) {
-        List<FireDTO> fireDTOList = new ArrayList<>();
-        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
-        String station = null;
-        int age;
         for (Person person : personRepository.getByType(address)) {
-            for (FireStation fireStation : fireStationRepository.getAll()) {
-                if (fireStation.getAddress().equals(person.getAddress())) {
-                    station = fireStation.getStation();
-                }
-            }
             for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()) {
                 if (person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())) {
                     age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate());
-                    Set<String> medicationsSet = new HashSet<>(medicalRecord.getMedications());
-                    Set<String> allergiesSet = new HashSet<>(medicalRecord.getAllergies());
-                    FireDTO newFireDTO = new FireDTO(person.getLastName(), person.getPhone(), station, age, medicationsSet,allergiesSet);
-                    fireDTOList.add(newFireDTO);
+                    List<String> medicalRecords = new ArrayList<>();
+                    medicalRecords.addAll(medicalRecord.getMedications());
+                    medicalRecords.addAll(medicalRecord.getAllergies());
+                    PersonListOfSameAddressDTO newPersonList = new PersonListOfSameAddressDTO(medicalRecord.getLastName(), person.getPhone(), age, medicalRecords);
+                    personListOfSameAddressDTOS.add(newPersonList);
+
                 }
             }
         }
-        System.out.println(fireDTOList.size()+" people are in this address.");
-        return fireDTOList;
+        FireDTO personListOfSameAddress = new FireDTO(personListOfSameAddressDTOS,stationNumber);
+        return personListOfSameAddress;
 
     }
     //Retourner une liste des numéros de téléphones des résidents desservis par la caserne de pompiers

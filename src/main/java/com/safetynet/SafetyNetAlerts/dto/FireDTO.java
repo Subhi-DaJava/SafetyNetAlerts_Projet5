@@ -19,10 +19,6 @@ public class FireDTO {
         this.medications = medications;
         this.allergies = allergies;
     }
-
-    public FireDTO() {
-    }
-
     public String getLastName() {
         return lastName;
     }

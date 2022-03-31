@@ -10,9 +10,6 @@ public class PersonInfoDTO {
     private String email;
     private Set<String> medicalRecords;
 
-    public PersonInfoDTO() {
-    }
-
     public PersonInfoDTO(String lastName, String address, int age, String email, Set<String> medicalRecords) {
         this.lastName = lastName;
         this.address = address;

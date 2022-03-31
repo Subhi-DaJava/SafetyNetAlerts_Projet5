@@ -1,9 +1,12 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
+import com.safetynet.SafetyNetAlerts.dto.FireDTO;
+import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
 import com.safetynet.SafetyNetAlerts.dto.PhoneAlertDTO;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
 import com.safetynet.SafetyNetAlerts.service.FireStationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,17 +15,19 @@ import java.util.List;
 @RestController
 public class FireStationController {
     @Autowired
-    FireStationService fireStationService;
-
-    //Api REST pour afficher toutes les FireStations
-    @GetMapping(value = "/firestation")
-    public ResponseEntity<Iterable<FireStation>> getAllFireStations(){
-        Iterable<FireStation> allFireStations = fireStationService.getAllFireStations();
-        if(allFireStations == null)
-            return ResponseEntity.notFound().build();
-        else
-            return ResponseEntity.ok().body(allFireStations);
+    private FireStationService fireStationService;
+    //Get all fireStations
+    @GetMapping(value = "/firestations")
+    public ResponseEntity<Iterable<FireStation>> getAllFireStation(){
+        Iterable<FireStation> allFireStations=  fireStationService.getAllFireStations();
+        if (allFireStations != null){
+            return ResponseEntity.ok(allFireStations);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
+
+
     //Ajouter d'un mapping caserne/adresse
     @PostMapping(value = "/firestation")
     public ResponseEntity<Void> addFireStation(@RequestBody FireStation f){
@@ -44,7 +49,7 @@ public class FireStationController {
         }
 
     }
-    ////Mettre à jour le numéro de la caserne d'une adresse
+    //Mettre à jour le numéro de la caserne d'une adresse
     @PutMapping(value = "/firestation/{address}/{number}")
     public ResponseEntity<Void> updateFireStation(@PathVariable("address") String address, @PathVariable("number") String number){
         FireStation isUpdated = fireStationService.updateStation(address, number);
@@ -55,16 +60,25 @@ public class FireStationController {
             return ResponseEntity.notFound().build();
         }
     }
-    //Trier les adresses par la caserne de pompiers
-    @GetMapping(value = "/firestation/{station}")
-    public ResponseEntity<Iterable<FireStation>> getByAddress(@PathVariable("station") String station){
 
-        Iterable<FireStation> listAddressByStation = fireStationService.getAddressByStation(station);
-        if (listAddressByStation != null){
-            return ResponseEntity.ok().body(listAddressByStation);
+    @GetMapping("/firestation/{stationNbr}")
+    public ResponseEntity<List<FireStation>> getByStationNumber(@PathVariable("stationNbr") String stationNbr){
+        List<FireStation> fireStations = fireStationService.getAllAddressCoveredByOneFireStation(stationNbr);
+        if(fireStations != null){
+            return ResponseEntity.ok(fireStations);
         }else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    //déplacer dans fireStationController
+    @GetMapping(value = "/fire")
+    public ResponseEntity<Iterable<FireDTO>> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(@RequestParam(name="address") String address){
+        List<FireDTO> listFireDto = fireStationService.getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(address);
+        if(listFireDto != null){
+            return ResponseEntity.ok().body(listFireDto);
+        }else
+            return ResponseEntity.notFound().build();
     }
 
     @GetMapping(value = "/phoneAlert")
@@ -76,5 +90,15 @@ public class FireStationController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping(value = "/firestation")
+    public ResponseEntity<List<FireStationDTO>> getAllPersonsInfoFromAGivenFireStationNumber(@RequestParam(value = "stationNumber") String stationNumber){
+        List<FireStationDTO> allPersonInfoByStation = fireStationService.getAllPersonsInfoFromAGivenFireStationNumber(stationNumber);
+        if(allPersonInfoByStation != null){
+            return ResponseEntity.ok(allPersonInfoByStation);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
 

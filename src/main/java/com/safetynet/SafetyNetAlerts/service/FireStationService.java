@@ -1,27 +1,30 @@
 package com.safetynet.SafetyNetAlerts.service;
 
+import com.safetynet.SafetyNetAlerts.dto.FireDTO;
+import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
+import com.safetynet.SafetyNetAlerts.dto.HomeListCoveredByOneFireStationDTO;
 import com.safetynet.SafetyNetAlerts.dto.PhoneAlertDTO;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
+import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.repository.FireStationRepository;
 import com.safetynet.SafetyNetAlerts.repository.MedicalRecordRepository;
 import com.safetynet.SafetyNetAlerts.repository.PersonRepository;
+import com.safetynet.SafetyNetAlerts.util.SolutionFormatter;
+import com.safetynet.SafetyNetAlerts.util.SolutionFormatterImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class FireStationService {
     @Autowired
-    FireStationRepository fireStationRepository;
+    private FireStationRepository fireStationRepository;
     @Autowired
-    MedicalRecordRepository medicalRecordRepository;
+    private MedicalRecordRepository medicalRecordRepository;
     @Autowired
-    PersonRepository personRepository;
+    private PersonRepository personRepository;
 
     public FireStationService() {
     }
@@ -55,10 +58,69 @@ public class FireStationService {
         return candidate;
     }
     //Trier les adresses par la caserne de pompiers
-    public Iterable<FireStation> getAddressByStation(String station){
-        return fireStationRepository.getByType(station);
+    public List<FireStation> getAllAddressCoveredByOneFireStation(String stationNbr){
+        return fireStationRepository.getByType(stationNbr);
     }
 
+
+    //Retourner la liste des habitants(que le NOM) d'une adresse donnée, ainsi que le numéro de la caserne de pompiers la desservante,
+    // les antécédents médicaux(médicaments,posologie et allergie)
+   /* public List<FireDTO> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(String address) {
+        List<FireDTO> fireDTOList = new ArrayList<>();
+        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
+        String station = null;
+        int age;
+        for (Person person : personRepository.getAll()) {
+            if (person.getAddress().contains(address)) {
+                for (FireStation fireStation : fireStationRepository.getAll()) {
+                    if (fireStation.getAddress().equals(person.getAddress())) {
+                        station = fireStation.getStation();
+                    }
+                }
+                for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()) {
+                    if (person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())) {
+                       age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate(),"MM/dd/yyyy");
+                        Set<String> medicationsSet = new HashSet<>(medicalRecord.getMedications());
+                        Set<String> allergiesSet = new HashSet<>(medicalRecord.getAllergies());
+                        FireDTO newFireDTO = new FireDTO(person.getLastName(), person.getPhone(), station, age, medicationsSet,allergiesSet);
+                        fireDTOList.add(newFireDTO);
+                    }
+                }
+
+            }
+        }
+        System.out.println(fireDTOList.size()+" people are in this address.");
+        return fireDTOList;
+
+    }*/
+
+    //Retourner la liste des habitants(que le NOM) d'une adresse donnée, ainsi que le numéro de la caserne de pompiers la desservante,
+    // les antécédents médicaux(médicaments,posologie et allergie)
+    public List<FireDTO> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(String address) {
+        List<FireDTO> fireDTOList = new ArrayList<>();
+        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
+        String station = null;
+        int age;
+        for (Person person : personRepository.getByType(address)) {
+            for (FireStation fireStation : fireStationRepository.getAll()) {
+                if (fireStation.getAddress().equals(person.getAddress())) {
+                    station = fireStation.getStation();
+                }
+            }
+            for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()) {
+                if (person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())) {
+                    age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate());
+                    Set<String> medicationsSet = new HashSet<>(medicalRecord.getMedications());
+                    Set<String> allergiesSet = new HashSet<>(medicalRecord.getAllergies());
+                    FireDTO newFireDTO = new FireDTO(person.getLastName(), person.getPhone(), station, age, medicationsSet,allergiesSet);
+                    fireDTOList.add(newFireDTO);
+                }
+            }
+        }
+        System.out.println(fireDTOList.size()+" people are in this address.");
+        return fireDTOList;
+
+    }
     //Retourner une liste des numéros de téléphones des résidents desservis par la caserne de pompiers
     public List<PhoneAlertDTO> getAllPhoneNumbersOfPersonsCoveredByOneFireStation(String fireStationNumber){
         List<PhoneAlertDTO> allPhonesAlerts = new ArrayList<>();
@@ -79,6 +141,36 @@ public class FireStationService {
         }
         System.out.println(allPhonesAlerts.size()+" phone numbers have been found.");
         return allPhonesAlerts;
+    }
+    public List<FireStationDTO> getAllPersonsInfoFromAGivenFireStationNumber(String fireStationNumber){
+        List<FireStationDTO> personList = new ArrayList<>();
+        List<HomeListCoveredByOneFireStationDTO> homeDTOList = new ArrayList<>();
+        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
+        int countAdult = 0;
+        int countChild = 0;
+
+        for (FireStation addressByFireStation : fireStationRepository.getByType(fireStationNumber)){
+            for (Person person : personRepository.getByType(addressByFireStation.getAddress())){
+
+                    for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()){
+                        if(person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())){
+                            int age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate());
+                            if(age > 18){
+                                countAdult++;
+                            }else {
+                                countChild++;
+                            }
+                            HomeListCoveredByOneFireStationDTO newHomeDTO = new HomeListCoveredByOneFireStationDTO(person.getFirstName(),person.getLastName(), person.getAddress(), person.getPhone());
+                            homeDTOList.add(newHomeDTO);
+                        }
+                    }
+
+            }
+
+        }
+        FireStationDTO newFireStationDto = new FireStationDTO(homeDTOList,countAdult,countChild);
+        personList.add(newFireStationDto);
+        return personList;
     }
 
 }

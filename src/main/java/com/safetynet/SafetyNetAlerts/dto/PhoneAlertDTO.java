@@ -9,9 +9,6 @@ public class PhoneAlertDTO {
         this.phone = phone;
     }
 
-    public PhoneAlertDTO() {
-    }
-
     public String getPhone() {
         return phone;
     }

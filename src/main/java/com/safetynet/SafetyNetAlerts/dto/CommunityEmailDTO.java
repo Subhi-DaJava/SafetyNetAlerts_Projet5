@@ -1,10 +1,10 @@
 package com.safetynet.SafetyNetAlerts.dto;
 
+import java.util.Objects;
+
 public class CommunityEmailDTO {
     private String email;
 
-    public CommunityEmailDTO() {
-    }
 
     public CommunityEmailDTO(String email) {
         this.email = email;
@@ -19,17 +19,22 @@ public class CommunityEmailDTO {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommunityEmailDTO emailDTO = (CommunityEmailDTO) o;
+        return Objects.equals(email, emailDTO.email);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public int hashCode() {
+        return Objects.hash(email);
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "CommunityEmailDTO{" +
+                "email='" + email + '\'' +
+                '}';
     }
 }

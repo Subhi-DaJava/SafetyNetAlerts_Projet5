@@ -12,11 +12,12 @@ import java.util.List;
 @Service
 public class MedicalRecordService {
     @Autowired
-    MedicalRecordRepository medicalRecordRepository;
+    private MedicalRecordRepository medicalRecordRepository;
     @Autowired
-    PersonRepository personRepository;
+    private PersonRepository personRepository;
+
     @Autowired
-    FireStationRepository fireStationRepository;
+    private FireStationRepository fireStationRepository;
 
     public MedicalRecordService() {
     }

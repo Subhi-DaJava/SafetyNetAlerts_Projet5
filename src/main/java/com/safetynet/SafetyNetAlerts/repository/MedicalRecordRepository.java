@@ -53,7 +53,7 @@ public class MedicalRecordRepository implements CRUD_Method<MedicalRecord>{
     }
 
     @Override
-    public List<MedicalRecord> getByType(String address) {
+    public List<MedicalRecord> getByType(String lastName) {
         return null;
     }
 

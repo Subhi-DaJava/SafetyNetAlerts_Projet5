@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MedicalRecordController {
     @Autowired
-    MedicalRecordService medicalRecordService;
+    private MedicalRecordService medicalRecordService;
 
     @GetMapping(value = "/medicalRecord")
     public ResponseEntity<Iterable<MedicalRecord>> getAllMedicalRecord(){

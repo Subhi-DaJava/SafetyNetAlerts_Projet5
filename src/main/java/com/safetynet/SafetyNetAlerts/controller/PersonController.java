@@ -2,6 +2,7 @@ package com.safetynet.SafetyNetAlerts.controller;
 
 import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
 import com.safetynet.SafetyNetAlerts.dto.FireDTO;
+import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
 import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
@@ -18,7 +19,7 @@ import java.util.List;
 public class PersonController {
     private static Logger logger = LoggerFactory.getLogger(PersonController.class);
     @Autowired
-    PersonService personService;
+    private PersonService personService;
 
     //Api REST pour afficher toutes les personnes, Endpoints
     @GetMapping(value = "/person")
@@ -84,14 +85,7 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping(value = "/fire")
-    public ResponseEntity<Iterable<FireDTO>> getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(@RequestParam(name="address") String address){
-        List<FireDTO> listFireDto = personService.getAllAddressPhoneAgeMedicalRecordAndNumberOfFireStation(address);
-        if(listFireDto != null){
-            return ResponseEntity.ok().body(listFireDto);
-        }else
-            return ResponseEntity.notFound().build();
-    }
+
 
     @GetMapping(value = "/personInfo")
     public ResponseEntity<Iterable<PersonInfoDTO>> getInformationOfSameFamily(@RequestParam(value = "firstName") String firstName, @RequestParam("lastName") String lastName){
@@ -102,4 +96,5 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }

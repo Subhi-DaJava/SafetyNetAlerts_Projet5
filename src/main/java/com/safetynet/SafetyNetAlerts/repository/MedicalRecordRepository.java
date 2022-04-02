@@ -4,6 +4,7 @@ import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -51,10 +52,19 @@ public class MedicalRecordRepository implements CRUD_Method<MedicalRecord>{
         //Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
         return medicalRecords.set(i,medicalRecord);
     }
-
+    //Get persons by same family name
     @Override
     public List<MedicalRecord> getByType(String lastName) {
-        return null;
+        List<MedicalRecord> medicalRecordListByLastName = new ArrayList<>();
+        if(repository == null)
+            loadMedicalRecordsFromJasonFile();
+
+        for (MedicalRecord medicalRecord : medicalRecords){
+            if(medicalRecord.getLastName().equals(lastName)){
+                medicalRecordListByLastName.add(medicalRecord);
+            }
+        }
+        return medicalRecordListByLastName;
     }
 
 }

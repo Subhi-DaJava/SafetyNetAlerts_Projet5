@@ -1,10 +1,13 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
+import com.safetynet.SafetyNetAlerts.dto.ChildAlertDTO;
 import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.service.MedicalRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class MedicalRecordController {
@@ -44,6 +47,24 @@ public class MedicalRecordController {
         Boolean isDeleted = medicalRecordService.deleteMedicalRecord(firstName,lastName);
         if(isDeleted){
             return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping(value = "/medicalRecord/{lastName}")
+    public ResponseEntity<Iterable<MedicalRecord>> getMedicalRecordsBySameFamilyName(@PathVariable("lastName") String lastName){
+        List<MedicalRecord> medicalRecordsBySameFamilyName = medicalRecordService.getMedicalRecordsBySameFamilyName(lastName);
+        if (medicalRecordsBySameFamilyName != null){
+            return ResponseEntity.ok(medicalRecordsBySameFamilyName);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping(value = "/childAlert")
+    public ResponseEntity<ChildAlertDTO> getChildList(@RequestParam("address") String address){
+        ChildAlertDTO listChildByAddress = medicalRecordService.getChildAndHisFamilyMemberByGivenAddress(address);
+        if(listChildByAddress != null){
+            return ResponseEntity.ok().body(listChildByAddress);
         }else {
             return ResponseEntity.notFound().build();
         }

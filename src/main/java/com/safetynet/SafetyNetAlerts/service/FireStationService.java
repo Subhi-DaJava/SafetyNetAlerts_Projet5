@@ -79,15 +79,13 @@ public class FireStationService {
                     List<String> medicalRecords = new ArrayList<>();
                     medicalRecords.addAll(medicalRecord.getMedications());
                     medicalRecords.addAll(medicalRecord.getAllergies());
-                    PersonListOfSameAddressDTO newPersonList = new PersonListOfSameAddressDTO(medicalRecord.getLastName(), person.getPhone(), age, medicalRecords);
+                    PersonListOfSameAddressDTO newPersonList = new PersonListOfSameAddressDTO(medicalRecord.getFirstName(),medicalRecord.getLastName(), person.getPhone(), age, medicalRecords);
                     personListOfSameAddressDTOS.add(newPersonList);
 
                 }
             }
         }
-        FireDTO personListOfSameAddress = new FireDTO(personListOfSameAddressDTOS,stationNumber);
-        return personListOfSameAddress;
-
+        return new FireDTO(personListOfSameAddressDTOS,stationNumber);
     }
     //Retourner une liste des numéros de téléphones des résidents desservis par la caserne de pompiers
     public List<PhoneAlertDTO> getAllPhoneNumbersOfPersonsCoveredByOneFireStation(String fireStationNumber){

@@ -1,5 +1,8 @@
 package com.safetynet.SafetyNetAlerts.util;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public interface SolutionFormatter {
      /**
       *

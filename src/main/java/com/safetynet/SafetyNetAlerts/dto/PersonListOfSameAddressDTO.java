@@ -4,16 +4,26 @@ import java.util.List;
 import java.util.Objects;
 
 public class PersonListOfSameAddressDTO {
+    private String firstName;
     private String lastName;
     private String phone;
     private int age;
     private List<String> medicalRecords;
 
-    public PersonListOfSameAddressDTO(String lastName, String phone, int age, List<String> medicalRecords) {
+    public PersonListOfSameAddressDTO(String firstName, String lastName, String phone, int age, List<String> medicalRecords) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.age = age;
         this.medicalRecords = medicalRecords;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -53,18 +63,19 @@ public class PersonListOfSameAddressDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PersonListOfSameAddressDTO that = (PersonListOfSameAddressDTO) o;
-        return age == that.age && Objects.equals(lastName, that.lastName) && Objects.equals(phone, that.phone) && Objects.equals(medicalRecords, that.medicalRecords);
+        return age == that.age && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(phone, that.phone) && Objects.equals(medicalRecords, that.medicalRecords);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastName, phone, age, medicalRecords);
+        return Objects.hash(firstName, lastName, phone, age, medicalRecords);
     }
 
     @Override
     public String toString() {
-        return "MedicalRecordCoveredByOneFireStationDTO{" +
-                "lastName='" + lastName + '\'' +
+        return "PersonListOfSameAddressDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", age=" + age +
                 ", medicalRecords=" + medicalRecords +

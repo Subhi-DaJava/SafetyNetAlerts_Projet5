@@ -1,8 +1,6 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
 import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
-import com.safetynet.SafetyNetAlerts.dto.FireDTO;
-import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
 import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
@@ -24,7 +22,9 @@ public class PersonController {
     //Api REST pour afficher toutes les personnes, Endpoints
     @GetMapping(value = "/person")
     public ResponseEntity<Iterable<Person>> getAllPerson(){
+        //
         Iterable<Person> persons = personService.getAllPersons();
+
         if(persons != null) {
             logger.info("Get all persons and their information");
             return ResponseEntity.status(HttpStatus.OK).body(persons);
@@ -34,11 +34,13 @@ public class PersonController {
         }
     }
     //Rajout un Person dans Repository mais pas dans le fichier Json <Person> / <Void> sont Pareil
+
     @PostMapping(value = "/person")
     public ResponseEntity<Void> addPerson(@RequestBody Person p){
         Boolean isAdded = personService.savePerson(p);
         if (isAdded){
-            return ResponseEntity.ok().build();
+            //Rajout d'une location
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }else {
             return ResponseEntity.notFound().build();
         }

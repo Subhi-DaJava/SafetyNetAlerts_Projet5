@@ -1,9 +1,11 @@
 package com.safetynet.SafetyNetAlerts.util;
 
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-
+@Component
 public class SolutionFormatterImpl implements SolutionFormatter{
 
     /**

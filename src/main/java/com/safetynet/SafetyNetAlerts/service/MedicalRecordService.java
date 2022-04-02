@@ -1,12 +1,17 @@
 package com.safetynet.SafetyNetAlerts.service;
 
+import com.safetynet.SafetyNetAlerts.dto.ChildAlertDTO;
+import com.safetynet.SafetyNetAlerts.dto.ChildInfos;
+import com.safetynet.SafetyNetAlerts.dto.PersonListOfSameAddressDTO;
 import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
-import com.safetynet.SafetyNetAlerts.repository.FireStationRepository;
+import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.repository.MedicalRecordRepository;
 import com.safetynet.SafetyNetAlerts.repository.PersonRepository;
+import com.safetynet.SafetyNetAlerts.util.SolutionFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,12 +20,9 @@ public class MedicalRecordService {
     private MedicalRecordRepository medicalRecordRepository;
     @Autowired
     private PersonRepository personRepository;
-
     @Autowired
-    private FireStationRepository fireStationRepository;
+    SolutionFormatter solutionFormatter;
 
-    public MedicalRecordService() {
-    }
     public Iterable<MedicalRecord> getAllMedicalRecords(){
         return medicalRecordRepository.getAll();
     }
@@ -48,4 +50,37 @@ public class MedicalRecordService {
         }
         return null;
     }
+    public List<MedicalRecord> getMedicalRecordsBySameFamilyName(String lastName){
+        return medicalRecordRepository.getByType(lastName);
+    }
+    //Retourner une list d'enfants habitent dans une adresse, la liste comprend le nom, âge, une liste des autres membres du foyer
+    public ChildAlertDTO getChildAndHisFamilyMemberByGivenAddress(String address){
+        List<ChildInfos> childInfosList = new ArrayList<>();
+        List<PersonListOfSameAddressDTO> personListOfSameAddress = new ArrayList<>();
+
+        for(Person personByAddress : personRepository.getByType(address)){
+            for (MedicalRecord medicalRecordByAddress : medicalRecordRepository.getAll()){
+                if(medicalRecordByAddress.getFirstName().equals(personByAddress.getFirstName()) && medicalRecordByAddress.getLastName().equals(personByAddress.getLastName())){
+                    if(solutionFormatter.formatterStringToDate(medicalRecordByAddress.getBirthdate()) <= 18){
+                        int ageChild = solutionFormatter.formatterStringToDate(medicalRecordByAddress.getBirthdate());
+                        ChildInfos newChildInfos = new ChildInfos(medicalRecordByAddress.getFirstName(),medicalRecordByAddress.getLastName(),ageChild);
+                        childInfosList.add(newChildInfos);
+                    }else {
+                        List<String> medicalRecords = new ArrayList<>();
+                        int ageAdult = solutionFormatter.formatterStringToDate(medicalRecordByAddress.getBirthdate());
+                        medicalRecords.addAll(medicalRecordByAddress.getMedications());
+                        medicalRecords.addAll(medicalRecordByAddress.getAllergies());
+                        PersonListOfSameAddressDTO newPersonListOfSameAddress =
+                                new PersonListOfSameAddressDTO(personByAddress.getFirstName(),personByAddress.getLastName(),personByAddress.getPhone(),ageAdult,medicalRecords);
+                        personListOfSameAddress.add(newPersonListOfSameAddress);
+                    }
+
+                }
+
+            }
+        }
+
+        return new ChildAlertDTO(childInfosList, personListOfSameAddress);
+    }
+
 }

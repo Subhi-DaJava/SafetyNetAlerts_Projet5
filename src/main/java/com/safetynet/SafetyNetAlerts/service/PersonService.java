@@ -29,12 +29,15 @@ public class PersonService {
     private FireStationRepository fireStationRepository;
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
-
+    //L'injection de dépendance
+    @Autowired
+    SolutionFormatter solutionFormatter;
 
     public PersonService() {
     }
     //Get all persons
     public Iterable<Person> getAllPersons(){
+
         return personRepository.getAll();
     }
     public Boolean savePerson(Person p){
@@ -88,17 +91,16 @@ public class PersonService {
     //Retourner le nom, l'adresse, l'âge, l'adresse mail, les antécédents médicaux(médicaments,posologie, allergies)
     public List<PersonInfoDTO> getInformationOfSameFamily(String firstName, String lastName) {
         List<PersonInfoDTO> personInfoDTOS = new ArrayList<>();
-        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
         int age;
         for (Person person : personRepository.getAll()) {
-            if (person.getLastName().equals(lastName)) {
+            if (person.getLastName().equals(lastName) && person.getFirstName().equals(firstName)) {
                 for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()) {
                     if (person.getLastName().equals(medicalRecord.getLastName()) && person.getFirstName().equals(medicalRecord.getFirstName())) {
                         age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate());
                         Set<String> mRecords = new HashSet<>();
                         mRecords.addAll(medicalRecord.getMedications());
                         mRecords.addAll(medicalRecord.getAllergies());
-                        PersonInfoDTO newPersonInfoDTO = new PersonInfoDTO(person.getLastName(), person.getAddress(), age, person.getEmail(), mRecords);
+                        PersonInfoDTO newPersonInfoDTO = new PersonInfoDTO(person.getFirstName(),person.getLastName(), person.getAddress(), age, person.getEmail(), mRecords);
                         personInfoDTOS.add(newPersonInfoDTO);
                     }
 

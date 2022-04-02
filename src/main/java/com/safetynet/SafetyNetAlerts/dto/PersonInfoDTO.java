@@ -4,18 +4,28 @@ import java.util.Objects;
 import java.util.Set;
 
 public class PersonInfoDTO {
+    private String firstName;
     private String lastName;
     private String address;
     private int age;
     private String email;
     private Set<String> medicalRecords;
 
-    public PersonInfoDTO(String lastName, String address, int age, String email, Set<String> medicalRecords) {
+    public PersonInfoDTO(String firstName, String lastName, String address, int age, String email, Set<String> medicalRecords) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.age = age;
         this.email = email;
         this.medicalRecords = medicalRecords;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -63,18 +73,19 @@ public class PersonInfoDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PersonInfoDTO that = (PersonInfoDTO) o;
-        return age == that.age && Objects.equals(lastName, that.lastName) && Objects.equals(address, that.address) && Objects.equals(email, that.email) && Objects.equals(medicalRecords, that.medicalRecords);
+        return age == that.age && firstName.equals(that.firstName) && lastName.equals(that.lastName) && address.equals(that.address) && email.equals(that.email) && medicalRecords.equals(that.medicalRecords);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastName, address, age, email, medicalRecords);
+        return Objects.hash(firstName, lastName, address, age, email, medicalRecords);
     }
 
     @Override
     public String toString() {
         return "PersonInfoDTO{" +
-                "lastName='" + lastName + '\'' +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
                 ", age=" + age +
                 ", email='" + email + '\'' +

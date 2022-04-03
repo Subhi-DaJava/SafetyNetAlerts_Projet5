@@ -20,7 +20,6 @@ public class MedicalRecordRepository implements CRUD_Method<MedicalRecord>{
     private void loadMedicalRecordsFromJasonFile(){
         repository = readFromJason_dao.readFromJsonFile();
         medicalRecords = repository.getMedicalrecords();
-        System.out.println(medicalRecords.size()+" medicalRecors are in the DataBase.");
     }
 
     @Override

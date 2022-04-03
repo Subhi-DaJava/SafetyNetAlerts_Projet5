@@ -1,17 +1,12 @@
 package com.safetynet.SafetyNetAlerts.service;
 
-import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
-import com.safetynet.SafetyNetAlerts.dto.FireDTO;
-import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
-import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
-import com.safetynet.SafetyNetAlerts.model.FireStation;
+import com.safetynet.SafetyNetAlerts.dto.*;
 import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.repository.FireStationRepository;
 import com.safetynet.SafetyNetAlerts.repository.MedicalRecordRepository;
 import com.safetynet.SafetyNetAlerts.repository.PersonRepository;
 import com.safetynet.SafetyNetAlerts.util.SolutionFormatter;
-import com.safetynet.SafetyNetAlerts.util.SolutionFormatterImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +78,6 @@ public class PersonService {
             CommunityEmailDTO communityEmailDTO = new CommunityEmailDTO(email);
             emailList.add(communityEmailDTO);
         }
-
-        System.out.println(emailList.size()+" emails have been found.");
         return emailList;
     }
 
@@ -108,8 +101,6 @@ public class PersonService {
 
             }
         }
-        System.out.println(personInfoDTOS.size()+" persons' infos have been found.");
         return personInfoDTOS;
     }
-
 }

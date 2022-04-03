@@ -26,7 +26,6 @@ public class PersonRepository implements CRUD_Method<Person> {
         repository = readFromJason_dao.readFromJsonFile();
         //Extraire les personnes
         persons = repository.getPersons();
-        System.out.println(persons.size()+" persons are in the DataBase.");
     }
     //retourne toutes les personnes
     @Override

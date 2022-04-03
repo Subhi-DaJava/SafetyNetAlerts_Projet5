@@ -22,7 +22,8 @@ public class FireStationService {
     private MedicalRecordRepository medicalRecordRepository;
     @Autowired
     private PersonRepository personRepository;
-
+    @Autowired
+    private SolutionFormatter solutionFormatter;
     public FireStationService() {
     }
     public Iterable<FireStation> getAllFireStations(){
@@ -63,7 +64,6 @@ public class FireStationService {
     // les antécédents médicaux(médicaments,posologie et allergie)
     public FireDTO getInfosOfPersonsLiveSameAddress(String address) {
         List<PersonListOfSameAddressDTO> personListOfSameAddressDTOS = new ArrayList<>();
-        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
         String stationNumber = null;
         int age;
 
@@ -105,9 +105,9 @@ public class FireStationService {
             PhoneAlertDTO newPhoneAlert = new PhoneAlertDTO(phoneNumber);
             allPhonesAlerts.add(newPhoneAlert);
         }
-        System.out.println(allPhonesAlerts.size()+" phone numbers have been found.");
         return allPhonesAlerts;
     }
+    //Retourne une liste des personnes couvertes par la caserne de pompiers correspondante, liste : nom, adresse, tel, décompte d'adulte et d'enfants
     public List<FireStationDTO> getAllPersonsInfoFromAGivenFireStationNumber(String fireStationNumber){
         List<FireStationDTO> personList = new ArrayList<>();
         List<HomeListCoveredByOneFireStationDTO> homeDTOList = new ArrayList<>();
@@ -138,5 +138,32 @@ public class FireStationService {
         personList.add(newFireStationDto);
         return personList;
     }
+    //Retourne une liste de tous les foyers desservis par la caserne, cette liste regroupe les personnes par adresse : nom, tel, âge et antécédents médicaux
+    public List<FloodDTO> getPersonsByAddressFromListOfStation_Number(List<String> listStation_Number){
+        List<FloodDTO> floodDTOList = new ArrayList<>();
+        for (String stationNumber : listStation_Number){
+            for (FireStation fireStation : fireStationRepository.getByType(stationNumber)){
+                //Regroupe les personnes dans la même address
+                List<PersonListOfSameAddressDTO> personsListOfSameAddress = new ArrayList<>();
+                for (Person person : personRepository.getByType(fireStation.getAddress())){
+                    for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()){
+                        if(person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())){
+                            int age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate());
+                            List<String> medicalRecords = new ArrayList<>();
+                            medicalRecords.addAll(medicalRecord.getMedications());
+                            medicalRecords.addAll(medicalRecord.getAllergies());
+                            PersonListOfSameAddressDTO personsListsOfSameAddress =
+                                    new PersonListOfSameAddressDTO(medicalRecord.getFirstName(),medicalRecord.getLastName(),person.getPhone(),age,medicalRecords);
+                            personsListOfSameAddress.add(personsListsOfSameAddress);
+                        }
+                    }
+                }
+                FloodDTO newFlood = new FloodDTO(personsListOfSameAddress,fireStation.getAddress());
+                floodDTOList.add(newFlood);
+            }
+        }
+        return floodDTOList;
+    }
+
 
 }

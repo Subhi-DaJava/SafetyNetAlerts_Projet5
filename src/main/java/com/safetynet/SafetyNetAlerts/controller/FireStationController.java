@@ -2,6 +2,7 @@ package com.safetynet.SafetyNetAlerts.controller;
 
 import com.safetynet.SafetyNetAlerts.dto.FireDTO;
 import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
+import com.safetynet.SafetyNetAlerts.dto.FloodDTO;
 import com.safetynet.SafetyNetAlerts.dto.PhoneAlertDTO;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
 import com.safetynet.SafetyNetAlerts.service.FireStationService;
@@ -95,6 +96,15 @@ public class FireStationController {
         List<FireStationDTO> allPersonInfoByStation = fireStationService.getAllPersonsInfoFromAGivenFireStationNumber(stationNumber);
         if(allPersonInfoByStation != null){
             return ResponseEntity.ok(allPersonInfoByStation);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/flood/stations")
+    public ResponseEntity<List<FloodDTO>> getPersonsByAddressFromListOfStation_Number(@RequestParam(value = "stations") List<String> station_numbers){
+        List<FloodDTO> personsByAddressFromListOfStation_number = fireStationService.getPersonsByAddressFromListOfStation_Number(station_numbers);
+        if(personsByAddressFromListOfStation_number != null){
+            return ResponseEntity.ok().body(personsByAddressFromListOfStation_number);
         }else {
             return ResponseEntity.notFound().build();
         }

@@ -24,7 +24,6 @@ public class PersonController {
     public ResponseEntity<Iterable<Person>> getAllPerson(){
         //
         Iterable<Person> persons = personService.getAllPersons();
-
         if(persons != null) {
             logger.info("Get all persons and their information");
             return ResponseEntity.status(HttpStatus.OK).body(persons);

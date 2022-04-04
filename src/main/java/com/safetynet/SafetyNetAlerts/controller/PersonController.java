@@ -4,8 +4,9 @@ import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
 import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 public class PersonController {
-    private static Logger logger = LoggerFactory.getLogger(PersonController.class);
+    private static final Logger LOGGER = LogManager.getLogger(PersonController.class);
     @Autowired
     private PersonService personService;
 
@@ -25,10 +26,10 @@ public class PersonController {
         //
         Iterable<Person> persons = personService.getAllPersons();
         if(persons != null) {
-            logger.info("Get all persons and their information");
+            LOGGER.info("Get all persons and their information");
             return ResponseEntity.status(HttpStatus.OK).body(persons);
         } else {
-            logger.error("No person in the DataBase or no success !");
+            LOGGER.error("No person in the DataBase or no success !");
             return ResponseEntity.notFound().build();
         }
     }

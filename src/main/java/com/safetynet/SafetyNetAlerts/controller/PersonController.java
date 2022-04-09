@@ -38,11 +38,11 @@ public class PersonController {
     //Rajout un Person dans Repository mais pas dans le fichier Json <Person> / <Void> sont Pareil
 
     @PostMapping(value = "/person")
-    public ResponseEntity<Person> addPerson(@RequestBody Person p){
+    public ResponseEntity<Void> addPerson(@RequestBody Person personAdded){
         LOGGER.debug("The endpoint(POST /person) starts here");
-        Boolean isAdded = personService.savePerson(p);
+        Boolean isAdded = personService.savePerson(personAdded);
         if (isAdded){
-            LOGGER.info("Save a person is successful with POST /person");
+            LOGGER.info("Save a "+personAdded+" is successful with POST /person");
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .buildAndExpand(true)
@@ -50,20 +50,20 @@ public class PersonController {
             return ResponseEntity.created(location).build();
 
         }else {
-            LOGGER.error("Could not save a person with POST /person");
+            LOGGER.error("Could not save a "+personAdded+" with POST /person");
             return ResponseEntity.notFound().build();
         }
     }
     //Mettre à jour une personne déjà existante(sauf les champs firstName & lastName)
-    @PutMapping(value ="/person")
-    public  ResponseEntity<Void> updatePerson(@RequestBody Person p){
+    @PutMapping(value ="/person/{firstName}/{lastName}")
+    public  ResponseEntity<Void> updatePerson(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName, @RequestBody Person personUpdated){
         LOGGER.debug("The endpoint(PUT /person) starts here");
-        Person candidate = personService.updatePerson(p);
+        Person candidate = personService.updatePerson(firstName,lastName,personUpdated);
         if (candidate != null){
-            LOGGER.info("Update a person is successful with PUT /person");
+            LOGGER.info("Update a person :"+firstName+" "+lastName+ " is successful with PUT /person");
             return ResponseEntity.ok().build();
         }else {
-            LOGGER.error("Could not update a person with PUT /person");
+            LOGGER.error("Could not update a person :"+firstName+" "+lastName+" with PUT /person");
             return ResponseEntity.notFound().build();
         }
     }
@@ -73,7 +73,7 @@ public class PersonController {
         LOGGER.debug("The endpoint(DELETE /person/firstName/lastName) starts here");
         Boolean isDeleted = personService.deletePerson(firstName,lastName);
         if(isDeleted){
-            LOGGER.info("Delete a person, firstName :" +firstName+", and lastName :"+lastName+" is successfully deleted from DELETE /person/firstName/lastName");
+            LOGGER.info("Delete a person, firstName :" +firstName+", and lastName : "+lastName+" is successfully deleted from DELETE /person/firstName/lastName");
             return ResponseEntity.ok().build();
         }else {
             LOGGER.error("Could not delete a person, firstName :" +firstName+", and lastName :"+lastName+" from DELETE /person/firstName/lastName");
@@ -97,7 +97,7 @@ public class PersonController {
     @GetMapping("/communityEmail")
     public ResponseEntity<Iterable<CommunityEmailDTO>> getAllEmailsOfGivenCity(@RequestParam (name="city") String city){
         LOGGER.debug("The endpoint url(GET /communityEmail?city=<city>) starts here");
-        List<CommunityEmailDTO> allEmails = personService.getAllEmailsFromGivenCity(city);
+        List<CommunityEmailDTO> allEmails = personService.getAllEmailsFromAGivenCity(city);
         if(allEmails != null){
             LOGGER.info("Get the emails with the city "+city+" given is successful from GET /person/address");
             return ResponseEntity.ok().body(allEmails);
@@ -120,5 +120,7 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
 
 }

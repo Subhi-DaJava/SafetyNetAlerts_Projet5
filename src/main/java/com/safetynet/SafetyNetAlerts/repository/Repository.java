@@ -6,6 +6,8 @@ import com.safetynet.SafetyNetAlerts.model.Person;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
+
 @Component
 public class Repository {
     private List<Person> persons;
@@ -43,5 +45,18 @@ public class Repository {
 
     public void setMedicalrecords(List<MedicalRecord> medicalrecords) {
         this.medicalrecords = medicalrecords;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Repository that = (Repository) o;
+        return Objects.equals(persons, that.persons) && Objects.equals(firestations, that.firestations) && Objects.equals(medicalrecords, that.medicalrecords);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(persons, firestations, medicalrecords);
     }
 }

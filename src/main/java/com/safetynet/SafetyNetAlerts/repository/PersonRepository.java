@@ -30,7 +30,6 @@ public class PersonRepository implements CRUD_Method<Person> {
     //retourne toutes les personnes
     @Override
     public List<Person> getAll() {
-        //logger
         if(repository == null)
             loadPersonsFromJasonFile();
         return persons;

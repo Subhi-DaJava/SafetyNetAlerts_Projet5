@@ -39,12 +39,12 @@ public class MedicalRecordService {
         }
         return false;
     }
-    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord){
+    public MedicalRecord updateMedicalRecord(String firstName, String lastName, MedicalRecord medicalRecord){
         List<MedicalRecord> allMedicalRecords = medicalRecordRepository.getAll();
 
         for (int i = 0; i < allMedicalRecords.size(); i++){
-            if(allMedicalRecords.get(i).getFirstName().equals(medicalRecord.getFirstName())
-                    && allMedicalRecords.get(i).getLastName().equals(medicalRecord.getLastName())){
+            if(allMedicalRecords.get(i).getFirstName().equals(firstName)
+                    && allMedicalRecords.get(i).getLastName().equals(lastName)){
                 return medicalRecordRepository.update(i,medicalRecord);
             }
         }
@@ -54,7 +54,7 @@ public class MedicalRecordService {
         return medicalRecordRepository.getByType(lastName);
     }
     //Retourner une list d'enfants habitent dans une adresse, la liste comprend le nom, âge, une liste des autres membres du foyer
-    public ChildAlertDTO getChildAndHisFamilyMemberByGivenAddress(String address){
+    public ChildAlertDTO getChildAndHisFamilyMemberByAGivenAddress(String address){
         List<ChildInfos> childInfosList = new ArrayList<>();
         List<PersonListOfSameAddressDTO> personListOfSameAddress = new ArrayList<>();
 
@@ -79,7 +79,13 @@ public class MedicalRecordService {
 
             }
         }
-
+        if(childInfosList.isEmpty() && personListOfSameAddress.isEmpty()) {
+            return null;
+        }else if(childInfosList.isEmpty() && personListOfSameAddress != null){
+            childInfosList = new ArrayList<>();
+            personListOfSameAddress = new ArrayList<>();
+            return new ChildAlertDTO(childInfosList, personListOfSameAddress);
+        }
         return new ChildAlertDTO(childInfosList, personListOfSameAddress);
     }
 

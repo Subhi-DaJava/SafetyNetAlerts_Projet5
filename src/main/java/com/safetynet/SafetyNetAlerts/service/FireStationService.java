@@ -42,16 +42,13 @@ public class FireStationService {
         return false;
     }
     //Update the number of the FireStation with the address
-    public FireStation updateStation(String address, String number) {
+    public FireStation updateStation(String address, FireStation stationNumberUpdated) {
         List<FireStation> allFireStations = fireStationRepository.getAll();
         FireStation candidate = null;
         for (int i = 0; i < allFireStations.size(); i++) {
             if (allFireStations.get(i).getAddress().equals(address)) {
-                candidate = allFireStations.get(i);
-                candidate.setStation(number);
-                fireStationRepository.update(i, candidate);
+               candidate = fireStationRepository.update(i, stationNumberUpdated);
             }
-
         }
         return candidate;
     }
@@ -62,7 +59,7 @@ public class FireStationService {
 
     //Retourner la liste des habitants(que le NOM) d'une adresse donnée, ainsi que le numéro de la caserne de pompiers la desservante,
     // les antécédents médicaux(médicaments,posologie et allergie)
-    public FireDTO getInfosOfPersonsLiveSameAddress(String address) {
+    public FireDTO getInfosOfPersonsLiveAtSameAddress(String address) {
         List<PersonListOfSameAddressDTO> personListOfSameAddressDTOS = new ArrayList<>();
         String stationNumber = null;
         int age;
@@ -85,7 +82,10 @@ public class FireStationService {
                 }
             }
         }
-        return new FireDTO(personListOfSameAddressDTOS,stationNumber);
+        FireDTO fireDTO = new FireDTO(personListOfSameAddressDTOS, stationNumber);
+        if(fireDTO.getListOfPersonAtSameAddress().isEmpty() && fireDTO.getStation()==null)
+            return null;
+        return fireDTO;
     }
     //Retourner une liste des numéros de téléphones des résidents desservis par la caserne de pompiers
     public List<PhoneAlertDTO> getAllPhoneNumbersOfPersonsCoveredByOneFireStation(String fireStationNumber){
@@ -99,25 +99,23 @@ public class FireStationService {
                     }
                 }
             }
-
         }
         for(String phoneNumber : phoneNumberSet) {
             PhoneAlertDTO newPhoneAlert = new PhoneAlertDTO(phoneNumber);
             allPhonesAlerts.add(newPhoneAlert);
         }
+        if(allPhonesAlerts.isEmpty())
+            return null;
         return allPhonesAlerts;
     }
     //Retourne une liste des personnes couvertes par la caserne de pompiers correspondante, liste : nom, adresse, tel, décompte d'adulte et d'enfants
     public List<FireStationDTO> getAllPersonsInfoFromAGivenFireStationNumber(String fireStationNumber){
         List<FireStationDTO> personList = new ArrayList<>();
         List<HomeListCoveredByOneFireStationDTO> homeDTOList = new ArrayList<>();
-        SolutionFormatter solutionFormatter = new SolutionFormatterImpl();
         int countAdult = 0;
         int countChild = 0;
-
         for (FireStation addressByFireStation : fireStationRepository.getByType(fireStationNumber)){
             for (Person person : personRepository.getByType(addressByFireStation.getAddress())){
-
                     for (MedicalRecord medicalRecord : medicalRecordRepository.getAll()){
                         if(person.getFirstName().equals(medicalRecord.getFirstName()) && person.getLastName().equals(medicalRecord.getLastName())){
                             int age = solutionFormatter.formatterStringToDate(medicalRecord.getBirthdate());
@@ -130,12 +128,14 @@ public class FireStationService {
                             homeDTOList.add(newHomeDTO);
                         }
                     }
-
             }
-
         }
         FireStationDTO newFireStationDto = new FireStationDTO(homeDTOList,countAdult,countChild);
         personList.add(newFireStationDto);
+        for (FireStationDTO fireStationDTO : personList){
+            if(fireStationDTO.getTotalChild()==0)
+                return null;
+        }
         return personList;
     }
     //Retourne une liste de tous les foyers desservis par la caserne, cette liste regroupe les personnes par adresse : nom, tel, âge et antécédents médicaux
@@ -162,6 +162,9 @@ public class FireStationService {
                 floodDTOList.add(newFlood);
             }
         }
+        if (floodDTOList.isEmpty())
+            return null;
+
         return floodDTOList;
     }
 

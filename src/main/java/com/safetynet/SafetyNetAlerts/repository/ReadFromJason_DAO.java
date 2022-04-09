@@ -24,6 +24,7 @@ public class ReadFromJason_DAO {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
+            //read json file and convert to repository object
             repository = objectMapper.readValue(new File(cp.getFileJson()), Repository.class);
 
         } catch (IOException e) {

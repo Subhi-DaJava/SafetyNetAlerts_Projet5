@@ -37,26 +37,26 @@ public class MedicalRecordController {
     public ResponseEntity<Void> saveMedicalRecord(@RequestBody MedicalRecord medicalRecord){
         Boolean isSaved = medicalRecordService.saveMedicalRecord(medicalRecord);
         if(isSaved){
-            LOGGER.info("Save a medicalRecord is successful with POST /medicalRecord");
+            LOGGER.info("Save a "+medicalRecord+" is successful with POST /medicalRecord");
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .buildAndExpand(isSaved)
                     .toUri();
             return ResponseEntity.created(location).build();
         }else {
-            LOGGER.error("Could not save a medicalRecord with POST /medicalRecord");
+            LOGGER.error("Could not save a "+medicalRecord+" with POST /medicalRecord");
             return ResponseEntity.notFound().build();
         }
     }
-    @PutMapping(value = "/medicalRecord")
-    public ResponseEntity<Void> updateMedicalRecord(@RequestBody MedicalRecord medicalRecord){
+    @PutMapping(value = "/medicalRecord/{firstName}/{lastName}")
+    public ResponseEntity<Void> updateMedicalRecord(@PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName, @RequestBody MedicalRecord medicalRecord){
         LOGGER.debug("The endpoint(PUT /medicalRecord) starts here");
-        MedicalRecord updateMedicalRecord = medicalRecordService.updateMedicalRecord(medicalRecord);
+        MedicalRecord updateMedicalRecord = medicalRecordService.updateMedicalRecord(firstName, lastName, medicalRecord);
         if (updateMedicalRecord != null){
-            LOGGER.info("Update a medicalRecord is successful with PUT /medicalRecord");
+            LOGGER.info("Update a medicalRecord "+firstName+" "+lastName+" is successful with PUT /medicalRecord");
             return ResponseEntity.ok().build();
         }else {
-            LOGGER.error("Could not update a medicalRecord with PUT /medicalRecord");
+            LOGGER.error("Could not update a medicalRecord "+firstName+" "+lastName+" with PUT /medicalRecord");
             return ResponseEntity.notFound().build();
         }
     }
@@ -88,7 +88,7 @@ public class MedicalRecordController {
     @GetMapping(value = "/childAlert")
     public ResponseEntity<ChildAlertDTO> getChildList(@RequestParam("address") String address){
         LOGGER.debug("The endpoint url(GET /childAlert?address=<address> starts here");
-        ChildAlertDTO listChildByAddress = medicalRecordService.getChildAndHisFamilyMemberByGivenAddress(address);
+        ChildAlertDTO listChildByAddress = medicalRecordService.getChildAndHisFamilyMemberByAGivenAddress(address);
         if(listChildByAddress != null) {
             LOGGER.info("Get the child infos with the address "+address+" is successful from GET /childAlert?address=address");
             return ResponseEntity.ok().body(listChildByAddress);

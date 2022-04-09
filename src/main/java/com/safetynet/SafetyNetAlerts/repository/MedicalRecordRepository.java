@@ -11,11 +11,13 @@ import java.util.List;
 public class MedicalRecordRepository implements CRUD_Method<MedicalRecord>{
     @Autowired
     private ReadFromJason_DAO readFromJason_dao;
+
     private Repository repository;
     private List<MedicalRecord> medicalRecords;
 
     public MedicalRecordRepository() {
     }
+
 
     private void loadMedicalRecordsFromJasonFile(){
         repository = readFromJason_dao.readFromJsonFile();

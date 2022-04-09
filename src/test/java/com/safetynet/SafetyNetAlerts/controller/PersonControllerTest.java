@@ -1,13 +1,20 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
+import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -15,7 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -31,25 +37,37 @@ class PersonControllerTest {
     //La méthode du controller exécutée par l’appel de “/person” utilise PersonService.
     @MockBean
     private PersonService personService;
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @BeforeEach
+    public void setUp(){
+
+    }
     /*
     La méthode perform prend en paramètre l’instruction get(“/person”). On exécute donc une requête GET sur l’URL /person.
     L’instruction .andExpect(status().isOk()) indique qu'une réponse HTTP 200.
     */
     @Test
-    public void testGetAllPerson() throws Exception {
+    public void getAllPersonTest() throws Exception {
+        Person person1 = new Person("Uyghur", "SherqiyTurkestan", "11 12 Noyabir", "Urumqi", "1933-44", "09990991", "weten@gmail.com");
+        Person person2 = new Person("Memet", "Emet", "25 dolet bagh", "Ghulja", "999999", "1111-33-44", "memet99@gmail.com");
+        List<Person> personList = new ArrayList<>(Arrays.asList(person1, person2));
+        Mockito.when(personService.getAllPersons()).thenReturn(personList);
         mockMvc.perform(get("/person"))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()",is(0)));
+                .andExpect(jsonPath("$.size()",is(2)))
+                .andExpect(jsonPath("$[0].firstName",is("Uyghur")));
 
         verify(personService).getAllPersons();
 
     }
     @Test
-    public void testGetAnyPerson() throws Exception {
+    public void getAnyPersonTest() throws Exception {
+
         when(personService.getAllPersons()).thenReturn(null);
+
         mockMvc.perform(get("/person"))
-                .andDo(print())
                 .andExpect(status().isNotFound());
 
         verify(personService).getAllPersons();
@@ -57,100 +75,143 @@ class PersonControllerTest {
     }
 
     @Test
-    public void testAddPerson() throws Exception {
-        String mappingJson = "{\"firstName\":\"Subhi\", \"lastName\":\"Yari\",\"address\":\"7 rue Narcissism\"," +
-                "\"city\":\"Paris\",\"zip\":\"75007\",\"phone\":\"841-874-3002\",\"email\":\"paris@gmail.com\"}";
-        when(personService.savePerson(any(Person.class))).thenReturn(true);
+    public void addAPersonTest() throws Exception {
+
+        Person person2 = new Person("Memet", "Emet", "25 dolet bagh", "Ghulja", "999999", "1111-33-44", "memet99@gmail.com");
+
+        when(personService.savePerson(person2)).thenReturn(true);
+
         mockMvc.perform(post("/person")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mappingJson))
-                .andExpect(status().isOk())
-                .andDo(print());
-               // .andExpect(jsonPath("$[0].firstName",is("Subhi")));
+                .content(objectMapper.writeValueAsString(person2)))
+                .andExpect(status().isCreated());
 
-        verify(personService).savePerson(any(Person.class));
+        verify(personService).savePerson(person2);
 
     }
     @Test
-    public void testAddAnyPerson() throws Exception {
-        String mappingJson = "{\"firstName\":\"\", \"lastName\":\"\",\"address\":\"7 rue Narcissism\"," +
-                "\"city\":\"Paris\",\"zip\":\"75007\",\"phone\":\"841-874-3002\",\"email\":\"paris@gmail.com\"}";
-        when(personService.savePerson(any(Person.class))).thenReturn(false);
+    public void addAnyPersonTest() throws Exception {
+        Person person1 = new Person("Uyghur", "SherqiyTurkestan", "11 12 Noyabir", "Urumqi", "1933-44", "09990991", "weten@gmail.com");
+
+        when(personService.savePerson(person1)).thenReturn(false);
         mockMvc.perform(post("/person")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mappingJson))
-                .andExpect(status().isNotFound())
-                .andDo(print());
+                .content(objectMapper.writeValueAsString(person1)))
+                .andExpect(status().isNotFound());
 
         verify(personService).savePerson(any(Person.class));
-
     }
 
     @Test
-    public void updatePerson() throws Exception {
+    public void updateAPersonTest() throws Exception {
+        Person personUpdated = new Person("Memet","Emet","6 Rue des ailes","Lyon","72000","520-620-8889","subhi@gmail.com");
 
-        String mappingJson = "{\"firstName\":\"Subhi\", \"lastName\":\"Yari\",\"address\":\"7 rue Narcissism\"," +
-                "\"city\":\"Paris\",\"zip\":\"75007\",\"phone\":\"841-874-3002\",\"email\":\"paris@gmail.com\"}";
-        Person p = new Person("Subhi","Yari","6 Rue des ailes","Lyon","72000","520-620-8889","subhi@gmail.com");
-        when(personService.updatePerson(any(Person.class))).thenReturn(p);
-        mockMvc.perform(put("/person")
+        when(personService.updatePerson(anyString(),anyString(),any(Person.class))).thenReturn(personUpdated);
+
+        mockMvc.perform(put("/person/Memet/Emet")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mappingJson))
-                        .andExpect(status().isOk())
-                        .andDo(print());
-        verify(personService, atLeast(1)).updatePerson(any(Person.class));
+                        .content(objectMapper.writeValueAsString(personUpdated)))
+                        .andExpect(status().isOk());
+        verify(personService, atLeast(1)).updatePerson("Memet","Emet",personUpdated);
     }
     @Test
-    public void updateAnyPerson() throws Exception {
-        String map = "{}";
-        when(personService.updatePerson(any(Person.class))).thenReturn(null);
-        mockMvc.perform(put("/person")
+    public void updateAnyPersonTest() throws Exception {
+        Person personUpdated = new Person("Memet","Emet","6 Rue des ailes","Lyon","72000","520-620-8889","subhi@gmail.com");
+        when(personService.updatePerson("Memet", "Emet",personUpdated)).thenReturn(null);
+        mockMvc.perform(put("/person/Memet/Emet")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(map))
-                .andExpect(status().isNotFound())
-                .andDo(print());
-        verify(personService).updatePerson(any(Person.class));
+                .content(objectMapper.writeValueAsString(personUpdated)))
+                .andExpect(status().isNotFound());
+        verify(personService).updatePerson("Memet","Emet",personUpdated);
     }
 
     @Test
-    public void deletePerson() throws Exception {
-
+    public void deleteAPersonTest() throws Exception {
+        Person personDeleted = new Person("Memet", "Emet", "25 dolet bagh", "Ghulja", "999999", "1111-33-44", "memet99@gmail.com");
         when(personService.deletePerson(anyString(),anyString())).thenReturn(true);
-        mockMvc.perform(delete("/person/firstName/lastName")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
+        mockMvc.perform(delete("/person/Memet/Emet"))
                 .andExpect(status().isOk());
         verify(personService).deletePerson(anyString(),anyString());
     }
     @Test
-    public void deleteAnyPerson() throws Exception {
+    public void deleteAnyPersonTest() throws Exception {
 
-        when(personService.deletePerson(anyString(),anyString())).thenReturn(false);
-        mockMvc.perform(delete("/person/firstName/lastName")
-                        .contentType(MediaType.APPLICATION_JSON))
-                         .andDo(print())
+        when(personService.deletePerson("Memet","Emet")).thenReturn(false);
+        mockMvc.perform(delete("/person/Memet/Emet"))
                          .andExpect(status().isNotFound());
-        verify(personService).deletePerson(anyString(),anyString());
+        verify(personService).deletePerson("Memet","Emet");
     }
     @Test
-    public void getByAddress() throws Exception {
-        when(personService.getByAddress(anyString())).thenReturn(anyIterable());
+    public void getByAddressTest() throws Exception {
+        Person person1 = new Person("Uyghur", "SherqiyTurkestan", "11 12 Noyabir", "Urumqi", "1933-44", "09990991", "weten@gmail.com");
+        List<Person> personList = new ArrayList<>(List.of(person1));
 
-        mockMvc.perform(get("/person/address"))
-                .andDo(print())
+        when(personService.getByAddress(person1.getAddress())).thenReturn(personList);
+
+        mockMvc.perform(get("/person/11 12 Noyabir"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()",is(0)));
-        verify(personService).getByAddress(anyString());
+                .andExpect(jsonPath("$.[0].firstName",is("Uyghur")));
+        verify(personService).getByAddress(person1.getAddress());
     }
 
     @Test
-    public void getByAddressFailure() throws Exception {
+    public void getByAddressFailureTest() throws Exception {
         when(personService.getByAddress(anyString())).thenReturn(null);
 
         mockMvc.perform(get("/person/address"))
-                .andDo(print())
                 .andExpect(status().isNotFound());
         verify(personService).getByAddress(anyString());
+    }
+    @Test
+    public void getAllEmailsOfGivenCityTest() throws Exception {
+        Person person1 = new Person("Uyghur", "SherqiyTurkestan", "11 12 Noyabir", "Urumqi", "1933-44", "09990991", "weten@gmail.com");
+        CommunityEmailDTO emailDTO = new CommunityEmailDTO(person1.getEmail());
+        List<CommunityEmailDTO> emailList = new ArrayList<>(List.of(emailDTO));
+
+        when(personService.getAllEmailsFromAGivenCity(anyString())).thenReturn(emailList);
+        mockMvc.perform(get("/communityEmail?city={?}","Urumqi"))
+                .andExpect(status().isOk());
+        verify(personService).getAllEmailsFromAGivenCity(anyString());
+
+    }
+    @Test
+    public void getAnyEmailOfGivenCityTest() throws Exception {
+        Person person1 = new Person("Uyghur", "SherqiyTurkestan", "11 12 Noyabir", "Urumqi", "1933-44", "09990991", "weten@gmail.com");
+
+        CommunityEmailDTO emailDTO = new CommunityEmailDTO(person1.getEmail());
+
+        when(personService.getAllEmailsFromAGivenCity(anyString())).thenReturn(null);
+        mockMvc.perform(get("/communityEmail?city={?}","Urumqi"))
+                .andExpect(status().isNotFound());
+        verify(personService).getAllEmailsFromAGivenCity(anyString());
+
+    }
+    @Test
+    public void getInformationOfSameNameTest() throws Exception {
+
+        Set<String> medicalRecord = new HashSet<>(Arrays.asList("aznol:350mg","hydrapermazol:100mg","nillacilan"));
+
+        PersonInfoDTO personInfo = new PersonInfoDTO("Memet","Emet","25 dolet bagh",15,"memet99@gmail.com",medicalRecord);
+        List<PersonInfoDTO> personInfoDTOList = new ArrayList<>(List.of(personInfo));
+
+        when(personService.getInformationOfSameFamily(anyString(),anyString())).thenReturn(personInfoDTOList);
+
+        mockMvc.perform(get("/personInfo?firstName={?}&lastName={?}","Memet","Emet"))
+                .andExpect(status().isOk());
+        verify(personService).getInformationOfSameFamily(anyString(),anyString());
+    }
+    @Test
+    public void getAnyInformationOfSameNameTest() throws Exception {
+
+        Set<String> medicalRecord = new HashSet<>(Arrays.asList("aznol:350mg","hydrapermazol:100mg","nillacilan"));
+
+        PersonInfoDTO personInfo = new PersonInfoDTO("Memet","Emet","25 dolet bagh",15,"memet99@gmail.com",medicalRecord);
+
+        when(personService.getInformationOfSameFamily(anyString(),anyString())).thenReturn(null);
+
+        mockMvc.perform(get("/personInfo?firstName={?}&lastName={?}","Memet","Emet"))
+                .andExpect(status().isNotFound());
+        verify(personService).getInformationOfSameFamily(anyString(), anyString());
     }
 
 

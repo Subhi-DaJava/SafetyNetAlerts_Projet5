@@ -11,7 +11,7 @@ import java.io.IOException;
 @Component
 public class ReadFromJason_DAO {
     @Autowired
-    CustomProperties cp;
+    private CustomProperties cp;
 
     public ReadFromJason_DAO(){
 

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PersonRepository implements CRUD_Method<Person> {
+public class PersonRepository implements Methods_CRUD<Person> {
 
     @Autowired
-    private ReadFromJason_DAO readFromJason_dao;
+    private DataJSONConverter readFromJason_dao;
     //Repository centrale
     private Repository repository;
 
@@ -56,21 +56,30 @@ public class PersonRepository implements CRUD_Method<Person> {
             loadPersonsFromJasonFile();
         //Inserts the specified element at the specified position in this list (optional operation).
         //Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
+        persons.set(i,p);
         return persons.set(i,p);
     }
 
     //Afficher les personnes dans la même adresse(tri par adresse)
     @Override
-    public List<Person> getByType(String address) {
+    public List<Person> getByType(String type) {
         if (repository == null)
             loadPersonsFromJasonFile();
 
         List<Person> listAddress = new ArrayList<>();
         for (Person person : persons) {
-            if (person.getAddress().equals(address)) {
+            if (person.getAddress().equals(type)) {
                 listAddress.add(person);
             }
         }
         return listAddress;
+    }
+
+    public List<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
     }
 }

@@ -29,7 +29,7 @@ public class PersonController {
         Iterable<Person> persons = personService.getAllPersons();
         if(persons != null) {
             LOGGER.info("The endpoint(GET /person) get all persons successfully and their information");
-            return ResponseEntity.status(HttpStatus.OK).body(persons);
+            return ResponseEntity.ok().body(persons);
         } else {
             LOGGER.error("No person in the DataBase or no success with GET /person");
             return ResponseEntity.notFound().build();

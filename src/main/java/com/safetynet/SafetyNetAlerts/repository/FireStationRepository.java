@@ -5,14 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Component
-public class FireStationRepository implements CRUD_Method<FireStation>{
+public class FireStationRepository implements Methods_CRUD<FireStation> {
     @Autowired
-    private ReadFromJason_DAO readFromJason_dao;
+    private DataJSONConverter readFromJason_dao;
 
     private Repository repository;
 
@@ -33,9 +32,7 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
         //fireStations(Mapping, désérialiser) affected by repository.getFireStations()
         if(repository == null )
             loadFireStationsFromJsonFile();
-        //Éliminer le doublon
-        Set<FireStation> allFireStations = new HashSet<>(fireStations);
-        return new ArrayList<>(allFireStations);
+        return  fireStations;
     }
 
     @Override
@@ -59,21 +56,31 @@ public class FireStationRepository implements CRUD_Method<FireStation>{
         if(repository == null)
             loadFireStationsFromJsonFile();
         //Update the element at the index of i of the list fireStations to fireStation
+
+       fireStations.set(i,fireStation);
+
         return fireStations.set(i,fireStation);
     }
 
     //Retourne une liste of FireStation by Station_number
     @Override
-    public List<FireStation> getByType(String station) {
+    public List<FireStation> getByType(String type) {
         if(repository == null)
             loadFireStationsFromJsonFile();
-        Set<FireStation> stations = new HashSet<>();
+        List<FireStation> fireStationsByStation = new ArrayList<>();
         for(FireStation fireStation : fireStations){
-            if (fireStation.getStation().equals(station)){
-                stations.add(fireStation);
+            if (fireStation.getStation().equals(type)){
+                fireStationsByStation.add(fireStation);
             }
         }
-        return new ArrayList<>(stations);
+        return fireStationsByStation;
     }
 
+    public List<FireStation> getFireStations() {
+        return fireStations;
+    }
+
+    public void setFireStations(List<FireStation> fireStations) {
+        this.fireStations = fireStations;
+    }
 }

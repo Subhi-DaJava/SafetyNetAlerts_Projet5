@@ -1,8 +1,8 @@
 package com.safetynet.SafetyNetAlerts.repository;
 
 import com.safetynet.SafetyNetAlerts.model.FireStation;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -25,9 +25,10 @@ class FireStationRepositoryTest {
     @MockBean
     private Repository repository;
     @MockBean
-    private ReadFromJason_DAO readFromJason_dao;
+    private DataJSONConverter readFromJason_dao;
 
     private List<FireStation> fireStationList ;
+
     @BeforeEach
     public void setUp(){
         FireStation fireStation_1 = new FireStation("5 rue Jean Jaures","1");
@@ -36,13 +37,17 @@ class FireStationRepositoryTest {
         when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
         when(repository.getFirestations()).thenReturn(fireStationList);
     }
+    @AfterEach
+    public void tearDown(){
+        fireStationRepository.setFireStations(fireStationList);
+    }
+
     @Test
     void getAllTest() {
         List<FireStation> allFireStations = fireStationRepository.getAll();
 
         assertThat(allFireStations).isEqualTo(fireStationList);
     }
-    @Disabled
     @Test
     void saveTest() {
         FireStation fireStationSaved = new FireStation("56 Rue de paris","3");
@@ -58,13 +63,13 @@ class FireStationRepositoryTest {
         boolean isDeleted = fireStationRepository.delete(fireStationDeleted);
         assertThat(isDeleted).isTrue();
     }
-    @Disabled
     @Test
     void updateTest() {
-        FireStation fireStationUpdated = new FireStation("6 rue Jean Jaures","1");
-        FireStation isUpdated = fireStationRepository.update(0,fireStationUpdated);
+        FireStation fireStation_Update = new FireStation("12 rue de Paris","2");
 
-        assertThat(isUpdated).isEqualTo(fireStationUpdated);
+        FireStation isUpdated = fireStationRepository.update(0,fireStation_Update);
+
+        assertThat(isUpdated).isEqualTo(fireStation_Update);
     }
 
     @Test

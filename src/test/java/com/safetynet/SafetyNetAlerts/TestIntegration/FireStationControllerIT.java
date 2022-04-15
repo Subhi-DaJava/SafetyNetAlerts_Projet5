@@ -2,6 +2,9 @@ package com.safetynet.SafetyNetAlerts.TestIntegration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
+import com.safetynet.SafetyNetAlerts.repository.Repository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,23 +12,40 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.File;
+import java.io.IOException;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FireStationIT {
+public class FireStationControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private Repository repository;
+    @BeforeEach
+    public void setUp() throws IOException {
+        String fileJson = "C:/Users/asus/openClassRoomsIntelliJ/P5_SprintBoot/Projet_P5/SafetyNetProjet/SafetyNet-Alerts/src/test/java/ressource/data.json";
+        repository = objectMapper.readValue(new File(fileJson), Repository.class);
+    }
 
+    @AfterEach
+    public void tearDown(){
+        repository.getPersons().clear();
+        repository.getFirestations().clear();
+        repository.getMedicalrecords().clear();
+    }
     @Test
     public void getAllFireStationTest() throws Exception {
         mockMvc.perform(get("/firestations"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(print());
     }
     @Test
     public void addFireStationTest() throws Exception{
@@ -65,6 +85,7 @@ public class FireStationIT {
     @Test
     public void getAllPhoneNumbersOfPersonsCoveredByOneFireStation() throws Exception {
         mockMvc.perform(get("/phoneAlert?firestation={firestation_number}","3"))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -76,7 +97,7 @@ public class FireStationIT {
 
     @Test
     public void getPersonsByAddressFromListOfStation_NumberTest() throws Exception {
-        mockMvc.perform(get("/flood/stations?stations={?}","1,3"))
+        mockMvc.perform(get("/flood/stations?stations={?}","4"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

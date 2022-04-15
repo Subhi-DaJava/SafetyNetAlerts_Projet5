@@ -2,7 +2,7 @@ package com.safetynet.SafetyNetAlerts.repository;
 
 import java.util.List;
 //Class générale, comme une classe DAO
-public interface CRUD_Method<Type>{
+public interface Methods_CRUD<Type>{
 
     List<Type> getAll();
 
@@ -12,5 +12,5 @@ public interface CRUD_Method<Type>{
 
     Type update(int i, Type type);
 
-    List<Type> getByType(String address);
+    List<Type> getByType(String type);
 }

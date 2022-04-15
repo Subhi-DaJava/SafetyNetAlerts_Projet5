@@ -1,8 +1,8 @@
 package com.safetynet.SafetyNetAlerts.repository;
 
 import com.safetynet.SafetyNetAlerts.model.Person;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,35 +25,35 @@ class PersonRepositoryTest {
     @MockBean
     private Repository repository;
     @MockBean
-    private ReadFromJason_DAO readFromJason_dao;
+    private DataJSONConverter readFromJason_dao;
+    List<Person> personList;
 
-    private List<Person> personList;
+
     @BeforeEach
     public void setUp(){
         Person person_1 = new Person("Uyghur", "SherqiyTurkestan", "11 12 Noyabir", "Urumqi", "1933-44", "09990991", "weten@gmail.com");
         Person person_2 = new Person("Memet", "Emet", "20 Nurbagh", "Ghulja", "909009", "200-123-568", "memet@gmail.com");
         personList = new ArrayList<>(Arrays.asList(person_1,person_2));
-
+        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
+        when(repository.getPersons()).thenReturn(personList);
+    }
+    @AfterEach
+    public void tearDown(){
+        personRepository.setPersons(personList);
     }
 
     @Test
     void getAllTest() {
-
-        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
-        when(repository.getPersons()).thenReturn(personList);
 
         List<Person> personList_result = personRepository.getAll();
 
         assertThat(personList_result).isEqualTo(personList);
     }
 
-    @Disabled
     @Test
     void saveTest() {
 
-        Person personSaved = new Person("Uyghur", "SherqiyTurkestan", "1 140 Noyabir", "Ghulja", "909009", "09990991", "weten@gmail.com");
-        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
-        when(repository.getPersons()).thenReturn(personList);
+        Person personSaved = new Person("Uyghur", "SherqiyTurkestan", "2 588 Noyabir", "Ghulja", "909009", "09990991", "weten@gmail.com");
 
         boolean isSaved_result = personRepository.save(personSaved);
 
@@ -62,8 +62,7 @@ class PersonRepositoryTest {
 
     @Test
     void deleteTest() {
-        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
-        when(repository.getPersons()).thenReturn(personList);
+
         boolean isDeleted_result = personRepository.delete(personList.get(0));
 
         assertThat(isDeleted_result).isTrue();
@@ -73,24 +72,10 @@ class PersonRepositoryTest {
     void updateTest() {
         Person personUpdated = new Person("Uyghur", "SherqiyTurkestan", "1 140 Noyabir", "Ghulja", "909009", "09990991", "sherqiy@gmail.com");
 
-        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
-        when(repository.getPersons()).thenReturn(personList);
-
         Person isUpdated_result = personRepository.update(0,personUpdated);
 
         assertThat(isUpdated_result).isEqualTo(personUpdated);
-    }
-    @Disabled
-    @Test
-    void updateFailureTest() {
-        Person personSaved = new Person("Uyghur", "SherqiyTurkestan", "1 140 Noyabir", "Ghulja", "909009", "09990991", "sherqiy@gmail.com");
 
-        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
-        when(repository.getPersons()).thenReturn(personList);
-
-        Person isUpdated_result = personRepository.update(1,personSaved);
-
-        assertThat(isUpdated_result).isNotEqualTo(personSaved);
     }
 
     @Test
@@ -98,8 +83,6 @@ class PersonRepositoryTest {
         Person person = new Person("Memet", "Emet", "20 Nurbagh", "Ghulja", "909009", "200-123-568", "memet@gmail.com");
 
         List<Person> listPersonByAddress = new ArrayList<>(List.of(person));
-        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
-        when(repository.getPersons()).thenReturn(personList);
 
         List<Person> listPersonByAddress_result = personRepository.getByType("20 Nurbagh");
 
@@ -110,8 +93,6 @@ class PersonRepositoryTest {
         Person person = new Person("Memet", "Emet", "20 Nurbagh", "Ghulja", "909009", "200-123-568", "memet@gmail.com");
 
         List<Person> listPersonByAddress = new ArrayList<>(List.of(person));
-        when(readFromJason_dao.readFromJsonFile()).thenReturn(repository);
-        when(repository.getPersons()).thenReturn(personList);
 
         List<Person> listPersonByAddress_result = personRepository.getByType("20 rue de Paris");
 

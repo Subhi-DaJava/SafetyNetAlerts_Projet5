@@ -8,7 +8,6 @@ import com.safetynet.SafetyNetAlerts.repository.FireStationRepository;
 import com.safetynet.SafetyNetAlerts.repository.MedicalRecordRepository;
 import com.safetynet.SafetyNetAlerts.repository.PersonRepository;
 import com.safetynet.SafetyNetAlerts.util.SolutionFormatter;
-import com.safetynet.SafetyNetAlerts.util.SolutionFormatterImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +23,7 @@ public class FireStationService {
     private PersonRepository personRepository;
     @Autowired
     private SolutionFormatter solutionFormatter;
+
     public FireStationService() {
     }
     public Iterable<FireStation> getAllFireStations(){
@@ -133,7 +133,7 @@ public class FireStationService {
         FireStationDTO newFireStationDto = new FireStationDTO(homeDTOList,countAdult,countChild);
         personList.add(newFireStationDto);
         for (FireStationDTO fireStationDTO : personList){
-            if(fireStationDTO.getTotalChild()==0)
+            if(fireStationDTO.getHomeListCoveredByOneFireStation().isEmpty())
                 return null;
         }
         return personList;

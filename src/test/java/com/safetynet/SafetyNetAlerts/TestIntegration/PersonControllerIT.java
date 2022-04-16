@@ -2,6 +2,7 @@ package com.safetynet.SafetyNetAlerts.TestIntegration;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.SafetyNetAlerts.exceptions.BadArgumentsException;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.repository.DataJSONConverter;
 import com.safetynet.SafetyNetAlerts.repository.Repository;
@@ -20,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -65,6 +68,7 @@ public class PersonControllerIT {
                 .andExpect(jsonPath("$[5].lastName",is("Marrack")));
 
     }
+
     @Test
     public void addPersonTest() throws Exception {
     mockMvc.perform(post("/person")
@@ -114,6 +118,14 @@ public class PersonControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].firstName",is("John")))
                 .andExpect(jsonPath("$[4].firstName",is("Felicia")));
+    }
+    @Test
+    public void getAnyPersonByAddressTest() throws Exception {
+        String city = "city";
+        mockMvc.perform(get("/person/{address}",city))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadArgumentsException))
+                .andExpect(result -> assertEquals("bad arguments", result.getResolvedException().getMessage()));
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.safetynet.SafetyNetAlerts.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
 import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
+import com.safetynet.SafetyNetAlerts.exceptions.PersonNotFoundException;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -65,7 +67,7 @@ class PersonControllerTest {
     @Test
     public void getAnyPersonTest() throws Exception {
 
-        when(personService.getAllPersons()).thenReturn(null);
+        when(personService.getAllPersons()).thenThrow(new PersonNotFoundException("Any person in data"));
 
         mockMvc.perform(get("/person"))
                 .andExpect(status().isNotFound());
@@ -156,7 +158,7 @@ class PersonControllerTest {
 
     @Test
     public void getByAddressFailureTest() throws Exception {
-        when(personService.getByAddress(anyString())).thenReturn(null);
+        when(personService.getByAddress(anyString())).thenThrow(new PersonNotFoundException("Not found any person information"));
 
         mockMvc.perform(get("/person/address"))
                 .andExpect(status().isNotFound());

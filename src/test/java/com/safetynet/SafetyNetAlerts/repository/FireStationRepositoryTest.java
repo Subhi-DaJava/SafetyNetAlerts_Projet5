@@ -48,28 +48,12 @@ class FireStationRepositoryTest {
 
         assertThat(allFireStations).isEqualTo(fireStationList);
     }
-    @Test
-    void saveTest() {
-        FireStation fireStationSaved = new FireStation("56 Rue de paris","3");
-
-        boolean isSaved = fireStationRepository.save(fireStationSaved);
-
-        assertThat(isSaved).isTrue();
-    }
 
     @Test
     void deleteTest() {
         FireStation fireStationDeleted = new FireStation("5 rue Jean Jaures","1");
         boolean isDeleted = fireStationRepository.delete(fireStationDeleted);
         assertThat(isDeleted).isTrue();
-    }
-    @Test
-    void updateTest() {
-        FireStation fireStation_Update = new FireStation("12 rue de Paris","2");
-
-        FireStation isUpdated = fireStationRepository.update(0,fireStation_Update);
-
-        assertThat(isUpdated).isEqualTo(fireStation_Update);
     }
 
     @Test

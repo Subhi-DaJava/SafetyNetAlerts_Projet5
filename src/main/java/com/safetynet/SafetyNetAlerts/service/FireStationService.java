@@ -26,7 +26,7 @@ public class FireStationService {
 
     public FireStationService() {
     }
-    public Iterable<FireStation> getAllFireStations(){
+    public List<FireStation> getAllFireStations(){
         return fireStationRepository.getAll();
     }
 
@@ -53,7 +53,7 @@ public class FireStationService {
         return candidate;
     }
     //Trier les adresses par la caserne de pompiers
-    public Iterable<FireStation> getAllAddressCoveredByOneFireStation(String stationNbr){
+    public List<FireStation> getAllAddressCoveredByOneFireStation(String stationNbr){
         return fireStationRepository.getByType(stationNbr);
     }
 

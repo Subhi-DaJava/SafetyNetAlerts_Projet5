@@ -2,6 +2,7 @@ package com.safetynet.SafetyNetAlerts.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.SafetyNetAlerts.dto.*;
+import com.safetynet.SafetyNetAlerts.exceptions.FireStationNotFoundException;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
 import com.safetynet.SafetyNetAlerts.service.FireStationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +56,7 @@ class FireStationControllerTest {
     }
     @Test
     public void getAnyFireStationsTest() throws Exception {
-        when(fireStationService.getAllFireStations()).thenReturn(null);
+        when(fireStationService.getAllFireStations()).thenThrow(new FireStationNotFoundException("Not found any FireStation information !"));
         mockMvc.perform(get("/firestations"))
                 .andExpect(status().isNotFound());
         Mockito.verify(fireStationService).getAllFireStations();
@@ -138,7 +139,7 @@ class FireStationControllerTest {
     @Test
     public void getAnyAddressByStationNumber() throws Exception {
 
-        when(fireStationService.getAllAddressCoveredByOneFireStation(anyString())).thenReturn(null);
+        when(fireStationService.getAllAddressCoveredByOneFireStation(anyString())).thenThrow(new FireStationNotFoundException("Any FireStation not found !"));
         mockMvc.perform(get("/firestation/{?}","3"))
                 .andExpect(status().isNotFound());
         verify(fireStationService).getAllAddressCoveredByOneFireStation(anyString());

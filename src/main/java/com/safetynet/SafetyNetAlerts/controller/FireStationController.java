@@ -4,12 +4,12 @@ import com.safetynet.SafetyNetAlerts.dto.FireDTO;
 import com.safetynet.SafetyNetAlerts.dto.FireStationDTO;
 import com.safetynet.SafetyNetAlerts.dto.FloodDTO;
 import com.safetynet.SafetyNetAlerts.dto.PhoneAlertDTO;
+import com.safetynet.SafetyNetAlerts.exceptions.FireStationNotFoundException;
 import com.safetynet.SafetyNetAlerts.model.FireStation;
 import com.safetynet.SafetyNetAlerts.service.FireStationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,15 +24,15 @@ public class FireStationController {
     private FireStationService fireStationService;
     //Get all fireStations
     @GetMapping(value = "/firestations")
-    public ResponseEntity<Iterable<FireStation>> getAllFireStation(){
+    public ResponseEntity<List<FireStation>> getAllFireStation(){
         LOGGER.debug("The endpoint(GET /firestations) starts here");
-        Iterable<FireStation> allFireStations=  fireStationService.getAllFireStations();
-        if (allFireStations != null){
+        List<FireStation> allFireStations=  fireStationService.getAllFireStations();
+        if (!allFireStations.isEmpty()){
             LOGGER.info("The endpoint(GET /firestations) get all fireStations successfully");
             return ResponseEntity.ok(allFireStations);
         }else {
             LOGGER.error("No fireStation in the DataBase or no success with GET /firestations");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new FireStationNotFoundException("There is any FireStation information in dataJson or data file not found");
         }
     }
 
@@ -82,15 +82,15 @@ public class FireStationController {
     }
 
     @GetMapping("/firestation/{stationNbr}")
-    public ResponseEntity<Iterable<FireStation>> getAllAddressByStationNumber(@PathVariable String stationNbr){
+    public ResponseEntity<List<FireStation>> getAllAddressByStationNumber(@PathVariable String stationNbr){
         LOGGER.debug("The endpoint(GET /firestation/stationNbr) starts here");
-        Iterable<FireStation> fireStations = fireStationService.getAllAddressCoveredByOneFireStation(stationNbr);
-        if(fireStations != null){
+        List<FireStation> fireStations = fireStationService.getAllAddressCoveredByOneFireStation(stationNbr);
+        if(!fireStations.isEmpty()){
             LOGGER.info("Get the fireStations covered by station number : "+stationNbr+" is successful with GET /firestation/stationNbr");
             return ResponseEntity.ok(fireStations);
         }else {
             LOGGER.error("Could not get  the fireStations by station number : "+stationNbr+" with GET /firestation/stationNbr");
-            return ResponseEntity.notFound().build();
+            throw new FireStationNotFoundException("Any FireStation dose not associate to this station number"+stationNbr);
         }
     }
 

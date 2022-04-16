@@ -1,6 +1,7 @@
 package com.safetynet.SafetyNetAlerts.controller;
 
 import com.safetynet.SafetyNetAlerts.dto.ChildAlertDTO;
+import com.safetynet.SafetyNetAlerts.exceptions.MedicalRecordNotFoundException;
 import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.service.MedicalRecordService;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,7 @@ public class MedicalRecordController {
             return ResponseEntity.ok().body(allMedicalRecords);
         } else {
             LOGGER.error("No medicalRecord in the DataBase or no success with GET /medicalRecord");
-            return ResponseEntity.notFound().build();
+           throw  new MedicalRecordNotFoundException("There is no person medicalRecord in dataJson or data file not found");
         }
     }
 
@@ -77,12 +78,12 @@ public class MedicalRecordController {
     public ResponseEntity<Iterable<MedicalRecord>> getMedicalRecordsBySameFamilyName(@PathVariable("lastName") String lastName){
         LOGGER.debug("The endpoint(GET /medicalRecord/lastName) starts here");
         List<MedicalRecord> medicalRecordsBySameFamilyName = medicalRecordService.getMedicalRecordsBySameFamilyName(lastName);
-        if (medicalRecordsBySameFamilyName != null){
+        if (!medicalRecordsBySameFamilyName.isEmpty()){
             LOGGER.info("The endpoint(GET /medicalRecord/lastName) get successfully all medicalRecords of same family name");
             return ResponseEntity.ok().body(medicalRecordsBySameFamilyName);
         }else{
             LOGGER.error("Could not get medicalRecords of same family name :"+lastName+" from GET /medicalRecord/lastName");
-            return ResponseEntity.notFound().build();
+            throw new MedicalRecordNotFoundException("Any MedicalRecord dose not associate to this lastName"+lastName);
         }
     }
     @GetMapping(value = "/childAlert")

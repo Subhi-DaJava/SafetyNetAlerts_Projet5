@@ -52,7 +52,7 @@ PersonService {
         return candidate;
     }
     //Trier les personnes par son adresse
-    public Iterable<Person> getByAddress(String address){
+    public List<Person> getByAddress(String address){
         return personRepository.getByType(address);
     }
     //Retourner une list<Email> ou null de tous les habitants d'une ville

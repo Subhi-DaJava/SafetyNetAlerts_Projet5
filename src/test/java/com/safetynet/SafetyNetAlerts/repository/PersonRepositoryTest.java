@@ -51,16 +51,6 @@ class PersonRepositoryTest {
     }
 
     @Test
-    void saveTest() {
-
-        Person personSaved = new Person("Uyghur", "SherqiyTurkestan", "2 588 Noyabir", "Ghulja", "909009", "09990991", "weten@gmail.com");
-
-        boolean isSaved_result = personRepository.save(personSaved);
-
-        assertThat(isSaved_result).isTrue();
-    }
-
-    @Test
     void deleteTest() {
 
         boolean isDeleted_result = personRepository.delete(personList.get(0));

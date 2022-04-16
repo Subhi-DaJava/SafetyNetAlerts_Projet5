@@ -51,7 +51,6 @@ public class MedicalRecordRepository implements Methods_CRUD<MedicalRecord> {
             loadMedicalRecordsFromJasonFile();
         //Inserts the specified element at the specified position in this list (optional operation).
         //Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
-        medicalRecords.set(i,medicalRecord);
         return medicalRecords.set(i,medicalRecord);
     }
     //Get persons by same family name

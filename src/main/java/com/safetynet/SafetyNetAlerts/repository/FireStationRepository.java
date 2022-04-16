@@ -56,9 +56,6 @@ public class FireStationRepository implements Methods_CRUD<FireStation> {
         if(repository == null)
             loadFireStationsFromJsonFile();
         //Update the element at the index of i of the list fireStations to fireStation
-
-       fireStations.set(i,fireStation);
-
         return fireStations.set(i,fireStation);
     }
 

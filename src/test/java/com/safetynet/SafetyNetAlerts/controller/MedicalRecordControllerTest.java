@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.SafetyNetAlerts.dto.ChildAlertDTO;
 import com.safetynet.SafetyNetAlerts.dto.ChildInfos;
 import com.safetynet.SafetyNetAlerts.dto.PersonListOfSameAddressDTO;
+import com.safetynet.SafetyNetAlerts.exceptions.MedicalRecordNotFoundException;
 import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.service.MedicalRecordService;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +59,7 @@ class MedicalRecordControllerTest {
     }
     @Test
     public void getAnyMedicalRecordTest() throws Exception {
-        Mockito.when(medicalRecordService.getAllMedicalRecords()).thenReturn(null);
+        Mockito.when(medicalRecordService.getAllMedicalRecords()).thenThrow(new MedicalRecordNotFoundException("Any MedicalRecord not found"));
         mockMvc.perform(get("/medicalRecord"))
                 .andExpect(status().isNotFound());
 
@@ -158,7 +159,7 @@ class MedicalRecordControllerTest {
     }
     @Test
     public void getAnyMedicalRecordBySameFamilyNameTest() throws Exception {
-        Mockito.when(medicalRecordService.getMedicalRecordsBySameFamilyName("Boyd")).thenReturn(null);
+        Mockito.when(medicalRecordService.getMedicalRecordsBySameFamilyName("Boyd")).thenThrow(new MedicalRecordNotFoundException("Any MedicalRecord not found !"));
 
         mockMvc.perform(get("/medicalRecord/Boyd"))
                 .andExpect(status().isNotFound());

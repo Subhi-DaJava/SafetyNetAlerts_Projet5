@@ -52,32 +52,12 @@ class MedicalRecordRepositoryTest {
     }
 
     @Test
-    void saveTest() {
-
-        MedicalRecord medicalRecordSaved = new MedicalRecord("Memet", "Emet", "25/10/2000", null,null);
-
-        boolean isSaved_result = medicalRecordRepository.save(medicalRecordSaved);
-
-        assertThat(isSaved_result).isTrue();
-    }
-
-    @Test
     void deleteTest() {
         MedicalRecord medicalRecordDeleted = new MedicalRecord("Adil", "Alim", "11/11/1933",null , null);
 
         boolean isDeleted_result = medicalRecordRepository.delete(medicalRecordDeleted);
 
         assertThat(isDeleted_result).isTrue();
-    }
-
-    @Test
-    void updateTest() {
-
-        MedicalRecord medicalRecordUpdated = new MedicalRecord("Memet", "Emet", "01/12/1990", null,null);
-
-        MedicalRecord isUpdated = medicalRecordRepository.update(1,medicalRecordUpdated);
-
-        assertThat(isUpdated).isEqualTo(medicalRecordUpdated);
     }
 
     @Test
@@ -88,8 +68,6 @@ class MedicalRecordRepositoryTest {
         List<MedicalRecord> listMedicalRecordsBySureName = medicalRecordRepository.getByType("Alim");
 
         assertThat(listMedicalRecordsBySureName).isEqualTo(medicalRecordListByLastName);
-
-
 
     }
 }

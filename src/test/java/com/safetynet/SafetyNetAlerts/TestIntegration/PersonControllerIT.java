@@ -4,11 +4,9 @@ package com.safetynet.SafetyNetAlerts.TestIntegration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.SafetyNetAlerts.exceptions.BadArgumentsException;
 import com.safetynet.SafetyNetAlerts.model.Person;
-import com.safetynet.SafetyNetAlerts.repository.DataJSONConverter;
 import com.safetynet.SafetyNetAlerts.repository.Repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -120,12 +118,12 @@ public class PersonControllerIT {
                 .andExpect(jsonPath("$[4].firstName",is("Felicia")));
     }
     @Test
-    public void getAnyPersonByAddressTest() throws Exception {
-        String city = "city";
-        mockMvc.perform(get("/person/{address}",city))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadArgumentsException))
-                .andExpect(result -> assertEquals("bad arguments", result.getResolvedException().getMessage()));
+    public void getPersonByAddressThrowsPersonNotFoundExceptionTest() throws Exception {
+        String address = "address";
+        mockMvc.perform(get("/person/{address}",address))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertEquals("PersonList with this address {"+address+"} doesn't exist.",
+                        result.getResolvedException().getMessage()));
     }
 
     @Test
@@ -134,6 +132,15 @@ public class PersonControllerIT {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+    @Test
+    public void getAnyEmailsOfGivenCityThrowsBadArgumentsExceptionTest() throws Exception {
+        String city = "city";
+        mockMvc.perform(get("/communityEmail?city={city}",city))
+                .andDo(print())
+                .andExpect(result -> assertEquals("bad arguments", result.getResolvedException().getMessage()))
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     public void getInformationOfSameFamilyTest() throws Exception {
         mockMvc.perform(get("/personInfo?firstName={firstName}&lastName={lastName}","Lily","Cooper"))

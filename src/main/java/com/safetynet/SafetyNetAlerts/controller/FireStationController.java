@@ -29,7 +29,7 @@ public class FireStationController {
         List<FireStation> allFireStations=  fireStationService.getAllFireStations();
         if (!allFireStations.isEmpty()){
             LOGGER.info("The endpoint(GET /firestations) get all fireStations successfully");
-            return ResponseEntity.ok(allFireStations);
+            return ResponseEntity.ok().body(allFireStations);
         }else {
             LOGGER.error("No fireStation in the DataBase or no success with GET /firestations");
             throw new FireStationNotFoundException("There is any FireStation information in dataJson or data file not found");
@@ -48,7 +48,7 @@ public class FireStationController {
                     .toUri();
             return ResponseEntity.created(location).build();
         }else {
-            LOGGER.error("Could not save a "+fireStationAdded+" with POST /firestation");
+            LOGGER.error("Could not save a  "+fireStationAdded+" with POST /firestation");
             return ResponseEntity.notFound().build();
         }
     }
@@ -76,21 +76,21 @@ public class FireStationController {
             return ResponseEntity.ok().build();
         }
         else {
-            LOGGER.error("Could not update a fireStation : "+address+" et"+stationNumberUpdated+" with PUT /firestation/address/number");
+            LOGGER.error("Could not update a fireStation : "+address+" et "+stationNumberUpdated+" with PUT /firestation/address/number");
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/firestation/{stationNbr}")
-    public ResponseEntity<List<FireStation>> getAllAddressByStationNumber(@PathVariable String stationNbr){
+    public ResponseEntity<List<FireStation>> getAllAddressByStationNumber(@PathVariable("stationNbr") String stationNbr){
         LOGGER.debug("The endpoint(GET /firestation/stationNbr) starts here");
         List<FireStation> fireStations = fireStationService.getAllAddressCoveredByOneFireStation(stationNbr);
         if(!fireStations.isEmpty()){
             LOGGER.info("Get the fireStations covered by station number : "+stationNbr+" is successful with GET /firestation/stationNbr");
-            return ResponseEntity.ok(fireStations);
+            return ResponseEntity.ok().body(fireStations);
         }else {
             LOGGER.error("Could not get  the fireStations by station number : "+stationNbr+" with GET /firestation/stationNbr");
-            throw new FireStationNotFoundException("Any FireStation dose not associate to this station number"+stationNbr);
+            throw new FireStationNotFoundException("Any FireStation dose not associate to this station number {"+stationNbr+"}");
         }
     }
 
@@ -99,7 +99,7 @@ public class FireStationController {
         LOGGER.debug("The endpoint url(GET /fire?address=<address>) starts here");
         FireDTO fireDto = fireStationService.getInfosOfPersonsLiveAtSameAddress(address);
         if(fireDto != null){
-            LOGGER.info("Get a list of family live at a address "+address+" covered by a fireStation : "+fireDto.getStation()+ ", with GET /fire?address=<address>");
+            LOGGER.info("Get a list of family live at a address "+address+" covered by a fireStation : "+fireDto.getStation()+", with GET /fire?address=<address>");
             return ResponseEntity.ok().body(fireDto);
         }else
             LOGGER.error("Could not get the list by the address : "+address+" with GET /fire?address=<address>");

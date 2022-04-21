@@ -3,6 +3,7 @@ package com.safetynet.SafetyNetAlerts.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.SafetyNetAlerts.dto.CommunityEmailDTO;
 import com.safetynet.SafetyNetAlerts.dto.PersonInfoDTO;
+import com.safetynet.SafetyNetAlerts.exceptions.BadArgumentsException;
 import com.safetynet.SafetyNetAlerts.exceptions.PersonNotFoundException;
 import com.safetynet.SafetyNetAlerts.model.Person;
 import com.safetynet.SafetyNetAlerts.service.PersonService;
@@ -17,10 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -65,15 +67,13 @@ class PersonControllerTest {
 
     }
     @Test
-    public void getAnyPersonTest() throws Exception {
-
-        when(personService.getAllPersons()).thenThrow(new PersonNotFoundException("Any person in data"));
-
+    public void getPersonThrowsPersonNotFoundExceptionTest() throws Exception {
+        when(personService.getAllPersons()).thenReturn(null);
         mockMvc.perform(get("/person"))
+                .andExpect(result -> assertEquals("There is no person information in dataJson or data file not found",
+                        result.getResolvedException().getMessage()))
                 .andExpect(status().isNotFound());
-
         verify(personService).getAllPersons();
-
     }
 
     @Test
@@ -157,10 +157,13 @@ class PersonControllerTest {
     }
 
     @Test
-    public void getByAddressFailureTest() throws Exception {
-        when(personService.getByAddress(anyString())).thenThrow(new PersonNotFoundException("Not found any person information"));
-
-        mockMvc.perform(get("/person/address"))
+    public void getByAddressThrowsPersonNotFoundExceptionTest() throws Exception {
+        List<Person> emptyPersonList = new ArrayList<>();
+        when(personService.getByAddress(anyString())).thenReturn(emptyPersonList);
+        String address = "address";
+        mockMvc.perform(get("/person/address",address))
+                .andExpect(result -> assertEquals("PersonList with this address {"+address+"} doesn't exist.",
+                result.getResolvedException().getMessage()))
                 .andExpect(status().isNotFound());
         verify(personService).getByAddress(anyString());
     }
@@ -178,16 +181,22 @@ class PersonControllerTest {
     }
     @Test
     public void getAnyEmailOfGivenCityTest() throws Exception {
-        Person person1 = new Person("Uyghur", "SherqiyTurkestan", "11 12 Noyabir", "Urumqi", "1933-44", "09990991", "weten@gmail.com");
-
-        CommunityEmailDTO emailDTO = new CommunityEmailDTO(person1.getEmail());
-
         when(personService.getAllEmailsFromAGivenCity(anyString())).thenReturn(null);
         mockMvc.perform(get("/communityEmail?city={?}","Urumqi"))
                 .andExpect(status().isNotFound());
         verify(personService).getAllEmailsFromAGivenCity(anyString());
 
     }
+    @Test
+    public void getEmailOfGivenCityThrowsBadArgumentsExceptionTest() throws Exception {
+
+        String city = "city";
+        mockMvc.perform(get("/communityEmail?city={city}",city))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadArgumentsException))
+                .andExpect(result -> assertEquals("bad arguments", result.getResolvedException().getMessage()));;
+    }
+
     @Test
     public void getInformationOfSameNameTest() throws Exception {
 

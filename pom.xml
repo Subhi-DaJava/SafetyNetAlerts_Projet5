@@ -74,10 +74,10 @@
 						<configuration>
 							<excludes>
 								<exclude>none</exclude>
-								<includes>
-									<include>**/*IT.java</include>
-								</includes>
 							</excludes>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
 						</configuration>
 					</execution>
 				</executions>

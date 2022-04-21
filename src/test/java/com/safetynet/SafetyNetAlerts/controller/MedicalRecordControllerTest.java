@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -58,9 +59,11 @@ class MedicalRecordControllerTest {
         Mockito.verify(medicalRecordService).getAllMedicalRecords();
     }
     @Test
-    public void getAnyMedicalRecordTest() throws Exception {
-        Mockito.when(medicalRecordService.getAllMedicalRecords()).thenThrow(new MedicalRecordNotFoundException("Any MedicalRecord not found"));
+    public void getMedicalRecordThrowsMedicalNotFoundExceptionTest() throws Exception {
+        Mockito.when(medicalRecordService.getAllMedicalRecords()).thenReturn(null);
         mockMvc.perform(get("/medicalRecord"))
+                .andExpect(result -> assertEquals("There is no person medicalRecord in dataJson or data file not found",
+                        result.getResolvedException().getMessage()))
                 .andExpect(status().isNotFound());
 
         Mockito.verify(medicalRecordService).getAllMedicalRecords();
@@ -158,10 +161,13 @@ class MedicalRecordControllerTest {
         Mockito.verify(medicalRecordService).getMedicalRecordsBySameFamilyName(anyString());
     }
     @Test
-    public void getAnyMedicalRecordBySameFamilyNameTest() throws Exception {
-        Mockito.when(medicalRecordService.getMedicalRecordsBySameFamilyName("Boyd")).thenThrow(new MedicalRecordNotFoundException("Any MedicalRecord not found !"));
-
-        mockMvc.perform(get("/medicalRecord/Boyd"))
+    public void getMedicalRecordBySameFamilyNameThrowsMedicalNotFoundExceptionTest() throws Exception {
+        List<MedicalRecord> emptyMedicalRecordList = new ArrayList<>();
+        Mockito.when(medicalRecordService.getMedicalRecordsBySameFamilyName("Boyd")).thenReturn(emptyMedicalRecordList);
+        String lastName = "lastName";
+        mockMvc.perform(get("/medicalRecord/lastName",lastName))
+                .andExpect(result -> assertEquals("Any MedicalRecord dose not associate to this lastName"+lastName,
+                        result.getResolvedException().getMessage()))
                 .andExpect(status().isNotFound());
 
         Mockito.verify(medicalRecordService).getMedicalRecordsBySameFamilyName(anyString());

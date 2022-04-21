@@ -10,6 +10,7 @@ import com.safetynet.SafetyNetAlerts.service.PersonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -83,18 +84,14 @@ public class PersonController {
     }
     //Tri par adresse
     @GetMapping(value = "/person/{address}")
-    public ResponseEntity<List<Person>> getByAddress(@PathVariable("address") String address) throws PersonNotFoundException, BadArgumentsException {
+    public ResponseEntity<List<Person>> getByAddress(@PathVariable("address") String address) throws PersonNotFoundException {
         LOGGER.debug("The endpoint (GET /person/address) starts here");
-         if("city".equals(address)){
-             LOGGER.error("The city should be replaced with the city in the list.");
-            throw new BadArgumentsException("bad arguments");
-        }
         List<Person> listFamilleByAddress = personService.getByAddress(address);
         if (!listFamilleByAddress.isEmpty()){
             LOGGER.info("Get the persons with the address {"+address+"} is successful from GET /person/address");
             return ResponseEntity.ok().body(listFamilleByAddress);
         } else {
-            LOGGER.error("Could not get the persons with the address "+address+" from GET /person/address");
+            LOGGER.error("Could not get the persons with the address {"+address+"} from GET /person/address");
             throw new PersonNotFoundException("PersonList with this address {"+address+"} doesn't exist.");
         }
     }
@@ -102,9 +99,10 @@ public class PersonController {
     @GetMapping("/communityEmail")
     public ResponseEntity<Iterable<CommunityEmailDTO>> getAllEmailsOfGivenCity(@RequestParam (name="city") String city) {
         LOGGER.debug("The endpoint url(GET /communityEmail?city=<city>) starts here");
-       /* if("bad arguments".equals(city)){
+        if("city".equals(city)){
+            LOGGER.error("The city should be replaced with the city :{"+city+"} in the list.");
             throw new BadArgumentsException("bad arguments");
-        }*/
+        }
         List<CommunityEmailDTO> allEmails = personService.getAllEmailsFromAGivenCity(city);
         if(allEmails != null){
             LOGGER.info("Get the emails with the city {"+city+"} given is successful from GET /person/address");

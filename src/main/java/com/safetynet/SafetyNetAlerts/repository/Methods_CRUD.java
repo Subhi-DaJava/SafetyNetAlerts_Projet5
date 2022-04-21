@@ -1,7 +1,7 @@
 package com.safetynet.SafetyNetAlerts.repository;
 
 import java.util.List;
-//Class générale, comme une classe DAO
+//Class générale, comme une interface CrudRepository<Type,Long > ou une couche DAO
 public interface Methods_CRUD<Type>{
 
     List<Type> getAll();

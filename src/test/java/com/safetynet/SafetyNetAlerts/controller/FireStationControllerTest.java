@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -55,9 +56,12 @@ class FireStationControllerTest {
         Mockito.verify(fireStationService).getAllFireStations();
     }
     @Test
-    public void getAnyFireStationsTest() throws Exception {
-        when(fireStationService.getAllFireStations()).thenThrow(new FireStationNotFoundException("Not found any FireStation information !"));
+    public void getFireStationsThrowsFireStationNotFoundExceptionTest() throws Exception {
+        List<FireStation> emptyFireStationList = new ArrayList<>();
+        when(fireStationService.getAllFireStations()).thenReturn(emptyFireStationList);
         mockMvc.perform(get("/firestations"))
+                .andExpect(result -> assertEquals("There is any FireStation information in dataJson or data file not found",
+                result.getResolvedException().getMessage()))
                 .andExpect(status().isNotFound());
         Mockito.verify(fireStationService).getAllFireStations();
     }
@@ -137,10 +141,13 @@ class FireStationControllerTest {
         verify(fireStationService).getAllAddressCoveredByOneFireStation(anyString());
     }
     @Test
-    public void getAnyAddressByStationNumber() throws Exception {
-
-        when(fireStationService.getAllAddressCoveredByOneFireStation(anyString())).thenThrow(new FireStationNotFoundException("Any FireStation not found !"));
-        mockMvc.perform(get("/firestation/{?}","3"))
+    public void getAddressByStationNumberThrowsFireStationNotFoundExceptionTest() throws Exception {
+        List<FireStation> emptyFireStationList = new ArrayList<>();
+        when(fireStationService.getAllAddressCoveredByOneFireStation(anyString())).thenReturn(emptyFireStationList);
+        String stationNbr = "stationNbr";
+        mockMvc.perform(get("/firestation/stationNbr",stationNbr))
+                .andExpect(result -> assertEquals("Any FireStation dose not associate to this station number {"+stationNbr+"}",
+                        result.getResolvedException().getMessage()))
                 .andExpect(status().isNotFound());
         verify(fireStationService).getAllAddressCoveredByOneFireStation(anyString());
     }

@@ -1,0 +1,190 @@
+{
+	"id": "3dcb388b-ae2d-4b90-a597-dda5ecaeddb7",
+	"name": "SafetyNet Alert",
+	"timestamp": "2022-04-22T17:05:16.024Z",
+	"collection_id": "20073289-6a8842ec-25e3-4e3d-adec-c54b0dbd8aaf",
+	"folder_id": "20073289-f73a5c3b-7ce2-4277-96d9-3ec177fe61aa",
+	"environment_id": "20073289-1e249325-1c25-4334-af24-fd65ee6dca6d",
+	"totalPass": 2,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "7ad41923-75eb-4675-a3d8-771627c5a363",
+			"name": "firestation?stationNumber=<station_number> : Get all persons info by Station",
+			"url": "http://localhost:8080/firestation?stationNumber=3",
+			"time": 33,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				33
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "d046a216-dc37-4684-a929-f4a3c789a0ec",
+			"name": "childAlert?address=<address> : Get Child Infos",
+			"url": "http://localhost:8080/childAlert?address=1509%20Culver%20St",
+			"time": 24,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				24
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "d3d58fd0-b58d-4b9b-b95a-e8d1c1f4bc0b",
+			"name": "phoneAlert?firestation=<address> : Get all phone number By Station",
+			"url": "http://localhost:8080/phoneAlert?firestation=3",
+			"time": 23,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				23
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "1cda7a68-94b5-4cfa-aa52-49a2bfded9d6",
+			"name": "fire?address=<address> : Get  infos of Persons at Same Address",
+			"url": "http://localhost:8080/fire?address=1509%20Culver%20St",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				16
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "25da8cf3-faf5-478e-9eff-1b88b35edade",
+			"name": "flood/stations?stations=<a list of station_number> : Get persons by a list of Station_numbers",
+			"url": "http://localhost:8080/flood/stations?stations=1,3",
+			"time": 19,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				19
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0515c31b-9437-4c1a-a007-08aa27876733",
+			"name": "personInfo?firstName=<firstName>&lastName=<lastName> : Get lastName, address, age, email et medicalRecords",
+			"url": "http://localhost:8080/personInfo?firstName=John&lastName=Boyd",
+			"time": 13,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				13
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "7166684a-06d8-4aae-9148-94ce544c1b61",
+			"name": "communityEmail?city=<city> : Get All Email",
+			"url": "http://localhost:8080/communityEmail?city=Culver",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				12
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 140,
+	"collection": {
+		"requests": [
+			{
+				"id": "7ad41923-75eb-4675-a3d8-771627c5a363",
+				"method": "GET"
+			},
+			{
+				"id": "d046a216-dc37-4684-a929-f4a3c789a0ec",
+				"method": "GET"
+			},
+			{
+				"id": "d3d58fd0-b58d-4b9b-b95a-e8d1c1f4bc0b",
+				"method": "GET"
+			},
+			{
+				"id": "1cda7a68-94b5-4cfa-aa52-49a2bfded9d6",
+				"method": "GET"
+			},
+			{
+				"id": "25da8cf3-faf5-478e-9eff-1b88b35edade",
+				"method": "GET"
+			},
+			{
+				"id": "0515c31b-9437-4c1a-a007-08aa27876733",
+				"method": "GET"
+			},
+			{
+				"id": "7166684a-06d8-4aae-9148-94ce544c1b61",
+				"method": "GET"
+			}
+		]
+	}
+}

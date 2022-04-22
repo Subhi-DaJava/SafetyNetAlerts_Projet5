@@ -1,0 +1,150 @@
+{
+	"id": "5159c38e-202a-4f93-b6a7-f4c1af27a9aa",
+	"name": "SafetyNet Alert",
+	"timestamp": "2022-04-22T17:01:36.234Z",
+	"collection_id": "20073289-6a8842ec-25e3-4e3d-adec-c54b0dbd8aaf",
+	"folder_id": "20073289-d6ed5801-a8d1-466d-ab98-978ec601c91a",
+	"environment_id": "20073289-1e249325-1c25-4334-af24-fd65ee6dca6d",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "db7f0645-db9b-4d12-9899-65ac9b266f1b",
+			"name": "http://localhost:8080/Get All Person",
+			"url": "http://localhost:8080/person",
+			"time": 220,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				220
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "56bd6685-1b34-437b-b525-fdf251f7cfa9",
+			"name": "http://localhost:8080/Get all Persons by Address",
+			"url": "http://localhost:8080/person/1509%20Culver%20St",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				36
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "7a6724b6-3cd0-4abf-b065-a53c50bf0a61",
+			"name": "http://localhost:8080/Get any Persons by Address Copy",
+			"url": "http://localhost:8080/person/1509%20Culve",
+			"time": 38,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				38
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "58f76988-7827-4492-88b0-159d8fae84aa",
+			"name": "http://localhost:8080/Save a Person",
+			"url": "http://localhost:8080/person",
+			"time": 53,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				53
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "80942366-c4dd-479c-95a3-ddcbd374ed1a",
+			"name": "http://localhost:8080/Update a Person",
+			"url": "http://localhost:8080/person/Alim/Omer",
+			"time": 13,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				13
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "327f5876-1454-4239-ad5f-681dc0edc226",
+			"name": "http://localhost:8080/Delete a Person(firstName et laste name required)",
+			"url": "http://localhost:8080/person/Eric/Cadigan",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				14
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 374,
+	"collection": {
+		"requests": [
+			{
+				"id": "db7f0645-db9b-4d12-9899-65ac9b266f1b",
+				"method": "GET"
+			},
+			{
+				"id": "56bd6685-1b34-437b-b525-fdf251f7cfa9",
+				"method": "GET"
+			},
+			{
+				"id": "7a6724b6-3cd0-4abf-b065-a53c50bf0a61",
+				"method": "GET"
+			},
+			{
+				"id": "58f76988-7827-4492-88b0-159d8fae84aa",
+				"method": "POST"
+			},
+			{
+				"id": "80942366-c4dd-479c-95a3-ddcbd374ed1a",
+				"method": "PUT"
+			},
+			{
+				"id": "327f5876-1454-4239-ad5f-681dc0edc226",
+				"method": "DELETE"
+			}
+		]
+	}
+}

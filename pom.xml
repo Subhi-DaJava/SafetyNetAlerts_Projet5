@@ -51,7 +51,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.7</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -61,7 +65,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>**/*.IT.java</exclude>
+						<exclude>**/*IT.java</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -75,9 +79,9 @@
 							<excludes>
 								<exclude>none</exclude>
 							</excludes>
-							<includes>
+						<!--	<includes>
 								<include>**/*IT.java</include>
-							</includes>
+							</includes>-->
 						</configuration>
 					</execution>
 				</executions>

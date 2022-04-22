@@ -1,0 +1,150 @@
+{
+	"id": "e6356f85-bae4-4dfd-a4f7-5a34646102bf",
+	"name": "SafetyNet Alert",
+	"timestamp": "2022-04-22T17:04:53.990Z",
+	"collection_id": "20073289-6a8842ec-25e3-4e3d-adec-c54b0dbd8aaf",
+	"folder_id": "20073289-2245074a-b13e-4d4b-b296-ae61c6532618",
+	"environment_id": "20073289-1e249325-1c25-4334-af24-fd65ee6dca6d",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "e29c6eaa-9c0a-4415-a640-f1d60a83d20f",
+			"name": "http://localhost:8080/Get all MedicalRecords",
+			"url": "http://localhost:8080/medicalRecord",
+			"time": 35,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				35
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "5d7bea56-c0eb-432e-ba1f-9962f9de1802",
+			"name": "http://localhost:8080/Get all MedicalRecords by Same Family Name",
+			"url": "http://localhost:8080/medicalRecord/Boyd",
+			"time": 13,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				13
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "52e1b828-5980-41fd-bc27-bffe42d875bb",
+			"name": "http://localhost:8080/Get any MedicalRecords by Same Family Name Copy",
+			"url": "http://localhost:8080/medicalRecord/Dunya",
+			"time": 18,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				18
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "418fc7c2-fa48-48aa-aeef-1c1adb2792a1",
+			"name": "http://localhost:8080/Save a MedicalRecord",
+			"url": "http://localhost:8080/medicalRecord",
+			"time": 22,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				22
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "6f91f4ba-4fc8-41f3-9db7-4b3f2e3cbfa1",
+			"name": "http://localhost:8080/Update a MedicalRecord",
+			"url": "http://localhost:8080/medicalRecord/Alim/Omer",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				12
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0f9bb728-978a-48b0-9541-8fc0588500b0",
+			"name": "http://localhost:8080/Delete a MedicalRecord(firstName&lastname required)",
+			"url": "http://localhost:8080/medicalRecord/Eric/Cadigan",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				10
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 110,
+	"collection": {
+		"requests": [
+			{
+				"id": "e29c6eaa-9c0a-4415-a640-f1d60a83d20f",
+				"method": "GET"
+			},
+			{
+				"id": "5d7bea56-c0eb-432e-ba1f-9962f9de1802",
+				"method": "GET"
+			},
+			{
+				"id": "52e1b828-5980-41fd-bc27-bffe42d875bb",
+				"method": "GET"
+			},
+			{
+				"id": "418fc7c2-fa48-48aa-aeef-1c1adb2792a1",
+				"method": "POST"
+			},
+			{
+				"id": "6f91f4ba-4fc8-41f3-9db7-4b3f2e3cbfa1",
+				"method": "PUT"
+			},
+			{
+				"id": "0f9bb728-978a-48b0-9541-8fc0588500b0",
+				"method": "DELETE"
+			}
+		]
+	}
+}

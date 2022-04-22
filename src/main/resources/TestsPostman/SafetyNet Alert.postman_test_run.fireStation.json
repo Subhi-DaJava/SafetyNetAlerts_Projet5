@@ -1,0 +1,150 @@
+{
+	"id": "b83041c4-b91d-4048-93cb-528070fbf1d0",
+	"name": "SafetyNet Alert",
+	"timestamp": "2022-04-22T17:04:25.303Z",
+	"collection_id": "20073289-6a8842ec-25e3-4e3d-adec-c54b0dbd8aaf",
+	"folder_id": "20073289-a55437e8-a998-4d83-8293-8acb055d5724",
+	"environment_id": "20073289-1e249325-1c25-4334-af24-fd65ee6dca6d",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "5df89734-2471-44ec-9989-16f4179efcc7",
+			"name": "http://localhost:8080/Get all FireStations",
+			"url": "http://localhost:8080/firestations",
+			"time": 41,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				41
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "aeeb4fd1-74b2-417f-b079-6fe24ab07369",
+			"name": "http://localhost:8080/Get all FireStations By Station Number",
+			"url": "http://localhost:8080/firestation/3",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				12
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "33f34b4a-5c99-46b7-9b2c-68031110ae6f",
+			"name": "http://localhost:8080/Get any FireStation By Station Number Copy",
+			"url": "http://localhost:8080/firestation/20",
+			"time": 13,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				13
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "a50cfa49-8e73-4d62-9fe1-cad87783f767",
+			"name": "http://localhost:8080/Save a FireStation",
+			"url": "http://localhost:8080/firestation",
+			"time": 12,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				12
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "9f9375d2-7abb-4acc-b336-343340babd19",
+			"name": "http://localhost:8080/Update the Number of FireStation",
+			"url": "http://localhost:8080/firestation/834%20Binoc%20Ave",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "ab1adb04-f73c-433f-be34-08351b860ab8",
+			"name": "http://localhost:8080/Delete an address from a FireStation",
+			"url": "http://localhost:8080/firestation/951%20LoneTree%20Rd",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				10
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 95,
+	"collection": {
+		"requests": [
+			{
+				"id": "5df89734-2471-44ec-9989-16f4179efcc7",
+				"method": "GET"
+			},
+			{
+				"id": "aeeb4fd1-74b2-417f-b079-6fe24ab07369",
+				"method": "GET"
+			},
+			{
+				"id": "33f34b4a-5c99-46b7-9b2c-68031110ae6f",
+				"method": "GET"
+			},
+			{
+				"id": "a50cfa49-8e73-4d62-9fe1-cad87783f767",
+				"method": "POST"
+			},
+			{
+				"id": "9f9375d2-7abb-4acc-b336-343340babd19",
+				"method": "PUT"
+			},
+			{
+				"id": "ab1adb04-f73c-433f-be34-08351b860ab8",
+				"method": "DELETE"
+			}
+		]
+	}
+}

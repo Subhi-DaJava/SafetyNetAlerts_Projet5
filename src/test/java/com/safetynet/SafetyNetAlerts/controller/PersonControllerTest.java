@@ -44,10 +44,6 @@ class PersonControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @BeforeEach
-    public void setUp(){
-
-    }
     /*
     La méthode perform prend en paramètre l’instruction get(“/person”). On exécute donc une requête GET sur l’URL /person.
     L’instruction .andExpect(status().isOk()) indique qu'une réponse HTTP 200.
@@ -194,7 +190,7 @@ class PersonControllerTest {
         mockMvc.perform(get("/communityEmail?city={city}",city))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof BadArgumentsException))
-                .andExpect(result -> assertEquals("bad arguments", result.getResolvedException().getMessage()));;
+                .andExpect(result -> assertEquals("bad arguments", result.getResolvedException().getMessage()));
     }
 
     @Test

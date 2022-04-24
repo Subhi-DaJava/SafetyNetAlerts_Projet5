@@ -3,7 +3,7 @@ L'application SafetyNet Alerts. Developpe avec spring boot. Le but de cette appl
 
 Prérequis
 Java 11
-Maven 3.6.2
+Maven 3.8.4
 
 Démarrer l'app
 Run `SafetyNetAlertsApplication`

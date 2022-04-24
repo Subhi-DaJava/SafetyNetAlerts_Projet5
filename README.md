@@ -6,17 +6,21 @@ Java 11
 Maven 3.8.4
 
 Démarrer l'app
-Run `SafetyNetAlertsApplication`
-Linge de commande : `mvn package`
-puis
-Avec fichier jar : `java -jar target/SafetyNetAlerts-Alerts-0.0.1-SNAPSHOT.jar`
-Ou
-`mvn spring-boot:run`
+
+1. Run `SafetyNetAlertsApplication`
+
+2. Linge de commande : `mvn package` puis
+
+jar : `java -jar target/SafetyNetAlerts-Alerts-0.0.1-SNAPSHOT.jar` 
+
+3. `mvn spring-boot:run`
 
 Tester l'app
-Ligne de commande : `mvn verify`
-Générer les rapports de test jacoco et surefire : `mvn site`
-Importer les collections(dans le dossier TestsPostman) dans `Postman` puis tester les endpoints et les URLs.
+1. Ligne de commande : `mvn verify`
+
+2. Générer les rapports de test jacoco et surefire : `mvn site`
+
+3. Importer les collections(dans le dossier TestsPostman) dans `Postman` puis tester les endpoints et les URLs.
 
 Actuator
 http://localhost:8080/actuator/info,

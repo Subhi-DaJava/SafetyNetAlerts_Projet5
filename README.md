@@ -56,8 +56,8 @@ GET http://localhost:8080/phoneAlert?firestation=`firestation_number` : Cette ur
 
 GET http://localhost:8080/fire?address=`address` : Cette url doit retourner la liste des habitants vivant à l’adresse donnée ainsi que le numéro de la caserne de pompiers la desservante.
 
-GET http://localhost:8080/flood/stations?stations=`a list of station_numbers` : Cette url doit retourner une liste de tous les foyers desservis par la caserne. Cette liste doit regrouper les personnes par adresse.
+GET http://localhost:8080/flood/stations?stations=`a_list_ofStation_numbers` : Cette url doit retourner une liste de tous les foyers desservis par la caserne. Cette liste doit regrouper les personnes par adresse.
 
-GET http://localhost:8080/personInfo?firstName=<firstName>&lastName=`lastName` : Cette url doit retourner le nom, l'adresse, l'âge, l'adresse mail et les antécédents médicaux (médicaments, posologie, allergies) de chaque habitant.
+GET http://localhost:8080/personInfo?firstName=`firstName`&lastName=`lastName` : Cette url doit retourner le nom, l'adresse, l'âge, l'adresse mail et les antécédents médicaux (médicaments, posologie, allergies) de chaque habitant.
 
 GET http://localhost:8080/communityEmail?city=`city` : Cette url doit retourner les adresses mail de tous les habitants de la ville.

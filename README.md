@@ -27,23 +27,35 @@ Les Endpoints : opération CRUD
 
 Person endpoints
 GET http://localhost:8080/person : get All Persons
+
 GET http://localhost:8080/person/address : get all Persons by address
+
 POST http://localhost:8080/person/ : save a Person
-http://localhost:8080/person/firstName/LastName : Update a Person
+
+PUT http://localhost:8080/person/firstName/LastName : Update a Person
+
 DELETE http://localhost:8080/person/firstName/LastName: delete a Person
 
 FireStation endpoints
 GET http://localhost:8080/firestations : get All FireStations
+
 GET http://localhost:8080/firestation/statonNbr : get all FireStations with the station number
+
 POST http://localhost:8080/firestation : save a FireStation
+
 PUT http://localhost:8080/firestation/address : update a FireStation
+
 DELETE http://localhost:8080/firestation/address : delete a FireStation
 
 Medical record endpoints
 GET http://localhost:8080/medicalRecord : get All MedicalRecords
+
 GET http://localhost:8080/medicalRecord/lastName : get all MedicalRecords with the last name
+
 POST http://localhost:8080/medicalRecord : save a MedicalRecord
+
 PUT http://localhost:8080/medicalRecord/firstName/lastName : update a MedicalRecord
+
 DELETE http://localhost:8080/medicalRecord/firstName/lastName : delete a MedicalRecord
 
 Alerts URLS

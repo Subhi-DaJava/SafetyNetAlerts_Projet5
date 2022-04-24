@@ -16,7 +16,7 @@ Ou
 Tester l'app
 Ligne de commande : `mvn verify`
 Générer les rapports de test jacoco et surefire : `mvn site`
-Importer les collections(dans le dossier TestsPostman) dans `Postman` puis tester les endpoints et les URLs. 
+Importer les collections(dans le dossier TestsPostman) dans `Postman` puis tester les endpoints et les URLs.
 
 Actuator
 http://localhost:8080/actuator/info
@@ -48,23 +48,16 @@ DELETE http://localhost:8080/medicalRecord/firstName/lastName : delete a Medical
 
 Alerts URLS
 
-GET http://localhost:8080/firestation?stationNumber=<station_number> : 
-Cette url doit retourner une liste des personnes couvertes par la caserne de pompiers correspondante.
+GET http://localhost:8080/firestation?stationNumber =`<station_number>` : Cette url doit retourner une liste des personnes couvertes par la caserne de pompiers correspondante.
 
-GET http://localhost:8080/childAlert?address=<address> :
-Cette url doit retourner une liste d'enfants (tout individu âgé de 18 ans ou moins) habitant à cette adresse.
+GET http://localhost:8080/childAlert?address =`<address>` : Cette url doit retourner une liste d'enfants (tout individu âgé de 18 ans ou moins) habitant à cette adresse.
 
-GET http://localhost:8080/phoneAlert?firestation=<firestation_number> :
-Cette url doit retourner une liste des numéros de téléphone des résidents desservis par la caserne de pompiers.
+GET http://localhost:8080/phoneAlert?firestation =`<firestation_number>` : Cette url doit retourner une liste des numéros de téléphone des résidents desservis par la caserne de pompiers.
 
-GET http://localhost:8080/fire?address=<address> :
-Cette url doit retourner la liste des habitants vivant à l’adresse donnée ainsi que le numéro de la caserne de pompiers la desservante.
+GET http://localhost:8080/fire?address =`<address>` : Cette url doit retourner la liste des habitants vivant à l’adresse donnée ainsi que le numéro de la caserne de pompiers la desservante.
 
-GET http://localhost:8080/flood/stations?stations=<a list of station_numbers> :
-Cette url doit retourner une liste de tous les foyers desservis par la caserne. Cette liste doit regrouper les personnes par adresse.
+GET http://localhost:8080/flood/stations?stations =`<a list of station_numbers>` : Cette url doit retourner une liste de tous les foyers desservis par la caserne. Cette liste doit regrouper les personnes par adresse.
 
-GET http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName> :
-Cette url doit retourner le nom, l'adresse, l'âge, l'adresse mail et les antécédents médicaux (médicaments, posologie, allergies) de chaque habitant.
+GET http://localhost:8080/personInfo?firstName=<firstName>&lastName =`<lastName>` : Cette url doit retourner le nom, l'adresse, l'âge, l'adresse mail et les antécédents médicaux (médicaments, posologie, allergies) de chaque habitant.
 
-GET http://localhost:8080/communityEmail?city=<city> :
-Cette url doit retourner les adresses mail de tous les habitants de la ville.
+GET http://localhost:8080/communityEmail?city =`<city>` : Cette url doit retourner les adresses mail de tous les habitants de la ville.

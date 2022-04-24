@@ -30,6 +30,7 @@ http://localhost:8080/actuator/metrics
 Les Endpoints : opération CRUD
 
 Person endpoints
+
 GET http://localhost:8080/person : get All Persons
 
 GET http://localhost:8080/person/address : get all Persons by address

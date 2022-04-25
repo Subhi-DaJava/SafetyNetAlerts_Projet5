@@ -1,6 +1,8 @@
 SafetyNet Alerts
 L'application SafetyNet Alerts. Developpe avec spring boot. Le but de cette application est d'envoyer des informations aux systèmes de services d'urgence.
 
+** Note ** : Configurer avant le chemin de fichier `data.json` dans l'`application.properties` afin de démarrer l'application
+
 Prérequis
 Java 11
 Maven 3.8.4

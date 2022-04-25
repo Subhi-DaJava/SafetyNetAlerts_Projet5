@@ -3,6 +3,7 @@ package com.safetynet.SafetyNetAlerts.TestIntegration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.SafetyNetAlerts.model.MedicalRecord;
 import com.safetynet.SafetyNetAlerts.repository.Repository;
+import com.safetynet.SafetyNetAlerts.util.CustomPropertiesTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,10 +31,11 @@ public class MedicalRecordControllerIT {
     @Autowired
     private ObjectMapper objectMapper;
     private Repository repository;
+    @Autowired
+    private CustomPropertiesTest customPropertiesTest;
     @BeforeEach
     public void setUp() throws IOException {
-        String fileJson = "C:/Users/asus/openClassRoomsIntelliJ/P5_SprintBoot/Projet_P5/SafetyNetProjet/SafetyNet-Alerts/src/test/java/ressource/data.json";
-        repository = objectMapper.readValue(new File(fileJson), Repository.class);
+        repository = objectMapper.readValue(new File(customPropertiesTest.getFileJson()), Repository.class);
     }
 
     @AfterEach
